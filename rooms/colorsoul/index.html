@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ColorSoul — AI Art Therapy Studio | Sacred Cycles</title>
+<meta name="description" content="AI-powered therapeutic coloring page generator. Create personalized healing art prompts guided by a Registered Nurse with 18 years of psychiatric experience.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage: #7C9A7E; --sage-light: #A8C4A2; --sage-dark: #4A6B4C;
+  --cream: #F5F0E8; --warm-white: #FDFAF4; --gold: #C4975A;
+  --gold-light: #E8C98A; --charcoal: #2C2C2C; --muted: #8A8578;
+  --blush: #D4A5A0; --deep: #1A2E1B; --panel: rgba(255,255,255,0.82);
+  --border: rgba(124,154,126,0.2);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--cream); color:var(--charcoal); font-family:'DM Sans',sans-serif; font-weight:300; min-height:100vh; }
+
+/* BG */
+.bg { position:fixed; inset:0; z-index:0;
+  background: radial-gradient(ellipse 80% 60% at 20% 0%, rgba(168,196,162,0.25) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 50% at 80% 100%, rgba(212,165,160,0.2) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 40% at 50% 50%, rgba(196,151,90,0.08) 0%, transparent 70%),
+              var(--cream); }
+
+/* NAV */
+nav { position:sticky; top:0; z-index:100; background:rgba(253,250,244,0.9); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border); padding:14px 40px; display:flex; align-items:center; justify-content:space-between; }
+.nav-logo { font-family:'Cinzel',serif; font-size:13px; letter-spacing:3px; color:var(--sage-dark); text-decoration:none; }
+.nav-back { font-size:12px; color:var(--muted); text-decoration:none; letter-spacing:1px;
+  display:flex; align-items:center; gap:6px; transition:color .2s; }
+.nav-back:hover { color:var(--sage-dark); }
+
+/* HERO */
+.hero { position:relative; z-index:1; text-align:center; padding:80px 40px 60px; }
+.hero-eyebrow { font-family:'Cinzel',serif; font-size:11px; letter-spacing:4px; color:var(--blush); margin-bottom:16px; }
+.hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(42px,6vw,72px); font-weight:300; color:var(--charcoal); line-height:1.1; margin-bottom:20px; }
+.hero-title span { color:var(--sage); font-style:italic; }
+.hero-sub { font-size:15px; color:var(--muted); max-width:520px; margin:0 auto 30px; line-height:1.7; }
+.rn-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(124,154,126,0.12);
+  border:1px solid var(--border); border-radius:30px; padding:8px 18px; font-size:12px; color:var(--sage-dark); letter-spacing:1px; }
+
+/* STUDIO */
+.studio { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:0 24px 80px; }
+
+.panel { background:var(--panel); border:1px solid var(--border); border-radius:20px; padding:32px; margin-bottom:24px;
+  box-shadow:0 4px 24px rgba(74,107,76,0.06); backdrop-filter:blur(8px); }
+.panel-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; color:var(--charcoal); margin-bottom:6px; }
+.panel-sub { font-size:12px; color:var(--muted); letter-spacing:1px; margin-bottom:24px; }
+
+/* SELECTORS */
+.selector-row { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+.chip { padding:8px 16px; border-radius:30px; border:1px solid var(--border); background:transparent;
+  font-size:12px; font-family:'DM Sans',sans-serif; color:var(--muted); cursor:pointer; transition:all .2s; letter-spacing:.5px; }
+.chip:hover, .chip.active { background:var(--sage); border-color:var(--sage); color:white; }
+.chip.blush:hover, .chip.blush.active { background:var(--blush); border-color:var(--blush); color:white; }
+.chip.gold:hover, .chip.gold.active { background:var(--gold); border-color:var(--gold); color:white; }
+
+label { display:block; font-size:12px; letter-spacing:1.5px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; }
+textarea, input[type=text] { width:100%; background:rgba(124,154,126,0.06); border:1px solid var(--border);
+  border-radius:12px; padding:14px 18px; font-size:14px; font-family:'DM Sans',sans-serif; color:var(--charcoal);
+  resize:none; outline:none; transition:border .2s; }
+textarea:focus, input[type=text]:focus { border-color:var(--sage); }
+
+/* TOGGLE */
+.toggle-row { display:flex; gap:0; border:1px solid var(--border); border-radius:30px; overflow:hidden; margin-bottom:20px; width:fit-content; }
+.toggle-btn { padding:8px 24px; font-size:12px; font-family:'DM Sans',sans-serif; letter-spacing:1px;
+  border:none; background:transparent; cursor:pointer; color:var(--muted); transition:all .2s; }
+.toggle-btn.active { background:var(--sage); color:white; }
+
+/* GENERATE BUTTON */
+.generate-btn { width:100%; padding:18px; background:linear-gradient(135deg, var(--sage-dark), var(--sage));
+  border:none; border-radius:14px; color:white; font-size:15px; font-family:'DM Sans',sans-serif;
+  letter-spacing:2px; cursor:pointer; transition:all .3s; position:relative; overflow:hidden; }
+.generate-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(74,107,76,0.3); }
+.generate-btn:disabled { opacity:.6; cursor:wait; }
+.generate-btn::after { content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+  transform:translateX(-100%); transition:transform .6s; }
+.generate-btn:hover::after { transform:translateX(100%); }
+
+/* OUTPUT */
+.output-box { display:none; }
+.output-box.visible { display:block; animation:fadeUp .5s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.prompt-display { background:linear-gradient(135deg, rgba(74,107,76,0.08), rgba(196,151,90,0.08));
+  border:1px solid var(--border); border-radius:16px; padding:28px; margin-bottom:16px; position:relative; }
+.prompt-label { font-size:10px; letter-spacing:2px; color:var(--sage); text-transform:uppercase; margin-bottom:12px; }
+.prompt-text { font-family:'Cormorant Garamond',serif; font-size:18px; line-height:1.7; color:var(--charcoal); font-style:italic; }
+.copy-btn { position:absolute; top:16px; right:16px; background:var(--sage); border:none; border-radius:8px;
+  color:white; font-size:11px; padding:6px 14px; cursor:pointer; letter-spacing:1px; transition:all .2s; }
+.copy-btn:hover { background:var(--sage-dark); }
+
+.therapy-note { background:rgba(212,165,160,0.15); border-left:3px solid var(--blush);
+  border-radius:0 12px 12px 0; padding:16px 20px; font-size:13px; color:var(--charcoal); line-height:1.7; margin-bottom:16px; }
+.therapy-note strong { color:var(--blush); }
+
+.action-row { display:flex; gap:12px; flex-wrap:wrap; }
+.action-btn { flex:1; min-width:140px; padding:12px 20px; border-radius:10px; border:1px solid var(--border);
+  font-size:12px; font-family:'DM Sans',sans-serif; letter-spacing:1px; cursor:pointer;
+  background:transparent; color:var(--charcoal); transition:all .2s; }
+.action-btn:hover { background:var(--sage); border-color:var(--sage); color:white; }
+.action-btn.primary { background:var(--gold); border-color:var(--gold); color:white; }
+.action-btn.primary:hover { background:#b8853e; }
+
+/* LOADING */
+.loading { text-align:center; padding:40px; }
+.loading-dots { display:inline-flex; gap:6px; }
+.loading-dots span { width:8px; height:8px; background:var(--sage); border-radius:50%; animation:bounce 1.2s infinite; }
+.loading-dots span:nth-child(2) { animation-delay:.2s; }
+.loading-dots span:nth-child(3) { animation-delay:.4s; }
+@keyframes bounce { 0%,80%,100% { transform:scale(.8); opacity:.5; } 40% { transform:scale(1.2); opacity:1; } }
+
+/* HISTORY */
+.history-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+.history-card { background:rgba(124,154,126,0.06); border:1px solid var(--border); border-radius:14px;
+  padding:18px; cursor:pointer; transition:all .2s; }
+.history-card:hover { background:rgba(124,154,126,0.12); transform:translateY(-2px); }
+.history-card-theme { font-size:11px; color:var(--sage); letter-spacing:1px; margin-bottom:6px; }
+.history-card-text { font-family:'Cormorant Garamond',serif; font-size:14px; line-height:1.6; color:var(--charcoal);
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.history-card-date { font-size:11px; color:var(--muted); margin-top:8px; }
+.empty-history { text-align:center; padding:40px; color:var(--muted); font-size:14px; }
+
+/* SCIENCE */
+.science-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; }
+.science-stat { text-align:center; padding:24px 16px; background:rgba(124,154,126,0.06);
+  border:1px solid var(--border); border-radius:14px; }
+.science-num { font-family:'Cormorant Garamond',serif; font-size:40px; color:var(--sage-dark); margin-bottom:6px; }
+.science-desc { font-size:12px; color:var(--muted); line-height:1.6; }
+
+/* FOOTER */
+footer { position:relative; z-index:1; text-align:center; padding:40px; border-top:1px solid var(--border);
+  font-size:12px; color:var(--muted); letter-spacing:1px; }
+footer a { color:var(--sage); text-decoration:none; }
+
+@media(max-width:600px) {
+  nav { padding:14px 20px; }
+  .hero { padding:60px 20px 40px; }
+  .studio { padding:0 16px 60px; }
+  .panel { padding:22px; }
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<nav>
+  <a href="/rooms/wellness-travel/index.html" class="nav-back">← Sacred Cycles</a>
+  <a href="/" class="nav-logo">SACRED CYCLES</a>
+  <span style="font-size:12px;color:var(--blush);letter-spacing:1px;">🎨 ColorSoul</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Sacred Cycles • Art Therapy Studio</div>
+  <h1 class="hero-title">Color Your <span>Soul</span> Back to Life</h1>
+  <p class="hero-sub">AI-generated therapeutic coloring prompts designed to reduce cortisol, process emotion, and restore your nervous system through creative expression.</p>
+  <div class="rn-badge">🩺 Designed by Ting Lott, RN — 18 Years Psychiatric Nursing</div>
+</section>
+
+<div class="studio">
+
+  <!-- GENERATOR PANEL -->
+  <div class="panel">
+    <div class="panel-title">Create Your Healing Prompt</div>
+    <div class="panel-sub">CUSTOMIZE YOUR THERAPEUTIC SESSION</div>
+
+    <!-- Mode -->
+    <label>Mode</label>
+    <div class="toggle-row" style="margin-bottom:20px;">
+      <button class="toggle-btn active" onclick="setMode(this,'adult')">Adult Therapy</button>
+      <button class="toggle-btn" onclick="setMode(this,'child')">Children (5–12)</button>
+      <button class="toggle-btn" onclick="setMode(this,'senior')">Senior Wellness</button>
+    </div>
+
+    <!-- Theme -->
+    <label>Healing Theme</label>
+    <div class="selector-row" id="themeChips">
+      <button class="chip active" onclick="select(this,'theme','Nature & Seasons')">🌿 Nature</button>
+      <button class="chip" onclick="select(this,'theme','Grief & Loss')">💜 Grief</button>
+      <button class="chip" onclick="select(this,'theme','Anxiety Relief')">🌊 Anxiety</button>
+      <button class="chip" onclick="select(this,'theme','Self-Love')">🌸 Self-Love</button>
+      <button class="chip" onclick="select(this,'theme','Trauma Recovery')">🦋 Trauma</button>
+      <button class="chip" onclick="select(this,'theme','Joy & Celebration')">☀️ Joy</button>
+      <button class="chip" onclick="select(this,'theme','Spiritual Connection')">✨ Spiritual</button>
+      <button class="chip" onclick="select(this,'theme','Boundaries & Strength')">🏔️ Strength</button>
+    </div>
+
+    <!-- Mood -->
+    <label>Current Mood</label>
+    <div class="selector-row" id="moodChips">
+      <button class="chip blush active" onclick="select(this,'mood','Anxious')">😰 Anxious</button>
+      <button class="chip blush" onclick="select(this,'mood','Sad')">😢 Sad</button>
+      <button class="chip blush" onclick="select(this,'mood','Angry')">😤 Angry</button>
+      <button class="chip blush" onclick="select(this,'mood','Numb')">😶 Numb</button>
+      <button class="chip blush" onclick="select(this,'mood','Hopeful')">🌱 Hopeful</button>
+      <button class="chip blush" onclick="select(this,'mood','Peaceful')">🕊️ Peaceful</button>
+      <button class="chip blush" onclick="select(this,'mood','Overwhelmed')">🌊 Overwhelmed</button>
+    </div>
+
+    <!-- Style -->
+    <label>Art Style</label>
+    <div class="selector-row" id="styleChips">
+      <button class="chip gold active" onclick="select(this,'style','Mandala')">⭕ Mandala</button>
+      <button class="chip gold" onclick="select(this,'style','Botanical')">🌺 Botanical</button>
+      <button class="chip gold" onclick="select(this,'style','Abstract')">🎨 Abstract</button>
+      <button class="chip gold" onclick="select(this,'style','Landscape')">🏞️ Landscape</button>
+      <button class="chip gold" onclick="select(this,'style','Animals')">🦋 Animals</button>
+      <button class="chip gold" onclick="select(this,'style','Geometric')">🔷 Geometric</button>
+      <button class="chip gold" onclick="select(this,'style','Celestial')">🌙 Celestial</button>
+    </div>
+
+    <!-- Intention (optional) -->
+    <label style="margin-top:4px;">Personal Intention <span style="color:var(--muted);font-size:10px;">(optional)</span></label>
+    <textarea id="intention" rows="2" placeholder="e.g. I want to release the tension I've been carrying in my chest..."></textarea>
+
+    <div style="height:20px;"></div>
+    <button class="generate-btn" onclick="generatePrompt()" id="genBtn">✦ GENERATE MY HEALING PROMPT</button>
+  </div>
+
+  <!-- OUTPUT PANEL -->
+  <div class="panel output-box" id="outputPanel">
+    <div class="loading" id="loadingState">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <p style="margin-top:16px;font-size:13px;color:var(--muted);letter-spacing:1px;">Creating your therapeutic prompt...</p>
+    </div>
+    <div id="resultState" style="display:none;">
+      <div class="panel-title" style="margin-bottom:6px;">Your Healing Prompt</div>
+      <div class="panel-sub">COPY INTO MIDJOURNEY, ADOBE FIREFLY, OR ANY AI ART TOOL</div>
+      <div class="prompt-display">
+        <div class="prompt-label">Midjourney / AI Image Prompt</div>
+        <div class="prompt-text" id="promptOutput"></div>
+        <button class="copy-btn" onclick="copyPrompt()">📋 Copy</button>
+      </div>
+      <div class="therapy-note" id="therapyNote"></div>
+      <div class="action-row">
+        <button class="action-btn" onclick="saveToJournal()">📓 Save to Journal</button>
+        <button class="action-btn" onclick="surpriseMe()">🎲 Surprise Me</button>
+        <button class="action-btn primary" onclick="generatePrompt()">✦ New Prompt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCIENCE PANEL -->
+  <div class="panel">
+    <div class="panel-title">The Science of Art Therapy</div>
+    <div class="panel-sub">CLINICAL EVIDENCE FROM YOUR RN</div>
+    <div class="science-grid">
+      <div class="science-stat">
+        <div class="science-num">75%</div>
+        <div class="science-desc">reduction in anxiety symptoms after 8 weeks of regular art therapy</div>
+      </div>
+      <div class="science-stat">
+        <div class="science-num">43%</div>
+        <div class="science-desc">decrease in cortisol levels measured after creative expression sessions</div>
+      </div>
+      <div class="science-stat">
+        <div class="science-num">89%</div>
+        <div class="science-desc">of psychiatric patients report improved mood after coloring therapy</div>
+      </div>
+      <div class="science-stat">
+        <div class="science-num">2x</div>
+        <div class="science-desc">faster trauma processing when combined with creative modalities</div>
+      </div>
+    </div>
+    <div style="margin-top:24px;background:rgba(74,107,76,0.06);border-left:3px solid var(--sage);border-radius:0 12px 12px 0;padding:20px 24px;">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;line-height:1.7;color:var(--charcoal);">
+        "In 18 years of psychiatric nursing, I've seen medications manage symptoms — but I've seen art therapy transform people. When a patient picks up a colored pencil and loses themselves in a mandala, something shifts. The nervous system quiets. The inner critic softens. The soul remembers it knows how to rest."
+      </p>
+      <p style="font-size:12px;color:var(--sage);letter-spacing:1px;margin-top:12px;">— Ting Lott, RN, BSN | Sacred Cycles Founder</p>
+    </div>
+  </div>
+
+  <!-- JOURNAL / HISTORY -->
+  <div class="panel">
+    <div class="panel-title">Your Coloring Journal</div>
+    <div class="panel-sub">SAVED PROMPTS — STORED LOCALLY ON YOUR DEVICE</div>
+    <div id="historyGrid" class="history-grid">
+      <div class="empty-history">✦ Your saved prompts will appear here.<br><span style="font-size:12px;">Generate a prompt and click "Save to Journal."</span></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>🌿 <a href="/">Sacred Cycles Renewal</a> • ColorSoul Art Therapy Studio</p>
+  <p style="margin-top:8px;">Designed by Ting Lott, RN | Not a substitute for professional mental health treatment</p>
+</footer>
+
+<script>
+
+const GROQ_MODEL = 'llama3-8b-8192';
+
+let selections = { theme:'Nature & Seasons', mood:'Anxious', style:'Mandala' };
+let mode = 'adult';
+let currentPrompt = '';
+
+function setMode(btn, m) {
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  mode = m;
+}
+
+function select(btn, type, value) {
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  selections[type] = value;
+}
+
+async function generatePrompt() {
+  const intention = document.getElementById('intention').value;
+  const outputPanel = document.getElementById('outputPanel');
+  const loadingState = document.getElementById('loadingState');
+  const resultState = document.getElementById('resultState');
+  const genBtn = document.getElementById('genBtn');
+
+  outputPanel.classList.add('visible');
+  loadingState.style.display = 'block';
+  resultState.style.display = 'none';
+  genBtn.disabled = true;
+  outputPanel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  const systemPrompt = `You are a therapeutic art therapy specialist and psychiatric nurse with 18 years of experience. 
+You create therapeutic coloring page prompts for AI image generators like Midjourney.
+Respond with EXACTLY two parts separated by "|||":
+1. A detailed Midjourney-style image prompt (intricate coloring page design, black and white line art, therapeutic, healing)
+2. A short therapeutic note (2-3 sentences) explaining the healing benefit of this specific image for the user's mood`;
+
+  const userMessage = `Create a therapeutic coloring page prompt for:
+- Mode: ${mode}
+- Theme: ${selections.theme}
+- Current mood: ${selections.mood}
+- Art style: ${selections.style}
+- Personal intention: ${intention || 'general healing and relaxation'}
+
+Format: [detailed image prompt] ||| [therapeutic note]`;
+
+  try {
+    const response = await fetch('/api/groq', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json',  },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages: [{ role:'system', content:systemPrompt }, { role:'user', content:userMessage }],
+        max_tokens: 500, temperature: 0.8
+      })
+    });
+
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content || '';
+    const parts = text.split('|||');
+    currentPrompt = parts[0]?.trim() || text;
+    const note = parts[1]?.trim() || 'This image was chosen to support your emotional wellbeing through creative expression.';
+
+    document.getElementById('promptOutput').textContent = currentPrompt;
+    document.getElementById('therapyNote').innerHTML = `<strong>🩺 RN Therapy Note:</strong> ${note}`;
+    loadingState.style.display = 'none';
+    resultState.style.display = 'block';
+  } catch (err) {
+    const fallbacks = [
+      "intricate mandala coloring page, detailed geometric patterns, nature-inspired botanical elements, sacred geometry, fine line art, black and white, therapeutic, healing, meditative, suitable for adult coloring",
+      "detailed botanical coloring page, wildflowers and ferns intertwined, butterfly resting on bloom, peaceful forest scene, fine line art, black and white only, therapeutic coloring book style",
+      "celestial coloring page, crescent moon surrounded by stars and clouds, sacred geometry borders, flowing cosmic patterns, intricate fine line art, black and white, meditative and healing"
+    ];
+    currentPrompt = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    document.getElementById('promptOutput').textContent = currentPrompt;
+    document.getElementById('therapyNote').innerHTML = `<strong>🩺 RN Therapy Note:</strong> Coloring intricate patterns activates the prefrontal cortex and quiets the amygdala — your brain's fear center. Even 20 minutes can measurably reduce cortisol.`;
+    loadingState.style.display = 'none';
+    resultState.style.display = 'block';
+  }
+
+  genBtn.disabled = false;
+}
+
+function copyPrompt() {
+  navigator.clipboard.writeText(currentPrompt).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy', 2000);
+  });
+}
+
+function saveToJournal() {
+  const history = JSON.parse(localStorage.getItem('colorSoulJournal') || '[]');
+  history.unshift({
+    prompt: currentPrompt,
+    theme: selections.theme,
+    mood: selections.mood,
+    style: selections.style,
+    date: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
+  });
+  localStorage.setItem('colorSoulJournal', JSON.stringify(history.slice(0, 20)));
+  renderHistory();
+  const btn = document.querySelector('.action-row .action-btn');
+  btn.textContent = '✅ Saved!';
+  setTimeout(() => btn.textContent = '📓 Save to Journal', 2000);
+}
+
+function surpriseMe() {
+  const themes = ['Nature & Seasons','Grief & Loss','Anxiety Relief','Self-Love','Trauma Recovery','Joy & Celebration','Spiritual Connection','Boundaries & Strength'];
+  const moods = ['Anxious','Sad','Angry','Numb','Hopeful','Peaceful','Overwhelmed'];
+  const styles = ['Mandala','Botanical','Abstract','Landscape','Animals','Geometric','Celestial'];
+  selections.theme = themes[Math.floor(Math.random()*themes.length)];
+  selections.mood = moods[Math.floor(Math.random()*moods.length)];
+  selections.style = styles[Math.floor(Math.random()*styles.length)];
+  // Update UI chips
+  document.querySelectorAll('#themeChips .chip').forEach(c => { c.classList.remove('active'); if(c.textContent.includes(selections.theme.split(' ')[0])) c.classList.add('active'); });
+  generatePrompt();
+}
+
+function renderHistory() {
+  const history = JSON.parse(localStorage.getItem('colorSoulJournal') || '[]');
+  const grid = document.getElementById('historyGrid');
+  if (!history.length) {
+    grid.innerHTML = '<div class="empty-history">✦ Your saved prompts will appear here.<br><span style="font-size:12px;">Generate a prompt and click "Save to Journal."</span></div>';
+    return;
+  }
+  grid.innerHTML = history.map(h => `
+    <div class="history-card" onclick="loadFromHistory('${encodeURIComponent(h.prompt)}')">
+      <div class="history-card-theme">${h.theme} • ${h.style}</div>
+      <div class="history-card-text">${h.prompt}</div>
+      <div class="history-card-date">${h.date}</div>
+    </div>
+  `).join('');
+}
+
+function loadFromHistory(encoded) {
+  currentPrompt = decodeURIComponent(encoded);
+  document.getElementById('promptOutput').textContent = currentPrompt;
+  document.getElementById('therapyNote').innerHTML = '<strong>🩺 RN Therapy Note:</strong> Revisiting a healing prompt deepens its therapeutic effect. Repetition in art therapy builds new neural pathways for calm and resilience.';
+  document.getElementById('outputPanel').classList.add('visible');
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('resultState').style.display = 'block';
+  document.getElementById('outputPanel').scrollIntoView({ behavior:'smooth' });
+}
+
+renderHistory();
+</script>
+</body>
+</html>

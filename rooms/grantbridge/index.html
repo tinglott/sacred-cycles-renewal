@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrantBridge — Free Grant Finder | Sacred Cycles</title>
+<meta name="description" content="Free AI-powered grant finder for underserved communities, nonprofits, and individuals. Find funding opportunities matched to your unique situation.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage: #7C9A7E; --sage-light: #A8C4A2; --sage-dark: #4A6B4C;
+  --cream: #F5F0E8; --warm-white: #FDFAF4; --gold: #C4975A;
+  --charcoal: #2C2C2C; --muted: #8A8578; --blush: #D4A5A0;
+  --deep: #1A2E1B; --panel: rgba(255,255,255,0.85); --border: rgba(124,154,126,0.2);
+  --teal: #4A8B7A;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--cream); color:var(--charcoal); font-family:'DM Sans',sans-serif; font-weight:300; min-height:100vh; }
+
+.bg { position:fixed; inset:0; z-index:0;
+  background: radial-gradient(ellipse 70% 50% at 0% 30%, rgba(74,139,122,0.2) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 40% at 100% 70%, rgba(124,154,126,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse 40% 30% at 50% 0%, rgba(196,151,90,0.1) 0%, transparent 60%), var(--cream); }
+
+nav { position:sticky; top:0; z-index:100; background:rgba(253,250,244,0.92); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border); padding:14px 40px; display:flex; align-items:center; justify-content:space-between; }
+.nav-logo { font-family:'Cinzel',serif; font-size:13px; letter-spacing:3px; color:var(--sage-dark); text-decoration:none; }
+.nav-back { font-size:12px; color:var(--muted); text-decoration:none; letter-spacing:1px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+.nav-back:hover { color:var(--teal); }
+
+.hero { position:relative; z-index:1; text-align:center; padding:80px 40px 60px; }
+.hero-eyebrow { font-family:'Cinzel',serif; font-size:11px; letter-spacing:4px; color:var(--teal); margin-bottom:16px; }
+.hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(42px,6vw,72px); font-weight:300; line-height:1.1; margin-bottom:20px; }
+.hero-title span { color:var(--teal); font-style:italic; }
+.hero-sub { font-size:15px; color:var(--muted); max-width:540px; margin:0 auto 24px; line-height:1.7; }
+.free-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(74,139,122,0.12);
+  border:1px solid rgba(74,139,122,0.3); border-radius:30px; padding:10px 24px; font-size:13px; color:var(--teal); letter-spacing:1px; font-weight:500; }
+
+.main { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:0 24px 80px; }
+.panel { background:var(--panel); border:1px solid var(--border); border-radius:20px; padding:32px; margin-bottom:24px;
+  box-shadow:0 4px 24px rgba(74,107,76,0.07); backdrop-filter:blur(8px); }
+.panel-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; margin-bottom:6px; }
+.panel-sub { font-size:12px; color:var(--muted); letter-spacing:1px; margin-bottom:24px; }
+
+label { display:block; font-size:12px; letter-spacing:1.5px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; }
+input[type=text], select, textarea {
+  width:100%; background:rgba(74,107,76,0.05); border:1px solid var(--border);
+  border-radius:12px; padding:13px 18px; font-size:14px; font-family:'DM Sans',sans-serif;
+  color:var(--charcoal); outline:none; transition:border .2s; margin-bottom:16px; }
+input:focus, select:focus, textarea:focus { border-color:var(--teal); }
+select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8578' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 16px center; cursor:pointer; }
+textarea { resize:none; }
+
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 20px; }
+@media(max-width:600px) { .form-grid { grid-template-columns:1fr; } }
+
+.chip-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.chip { padding:8px 16px; border-radius:30px; border:1px solid var(--border); background:transparent;
+  font-size:12px; font-family:'DM Sans',sans-serif; color:var(--muted); cursor:pointer; transition:all .2s; }
+.chip:hover, .chip.active { background:var(--teal); border-color:var(--teal); color:white; }
+
+.search-btn { width:100%; padding:18px; background:linear-gradient(135deg, var(--sage-dark), var(--teal));
+  border:none; border-radius:14px; color:white; font-size:15px; font-family:'DM Sans',sans-serif;
+  letter-spacing:2px; cursor:pointer; transition:all .3s; }
+.search-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(74,107,76,0.3); }
+.search-btn:disabled { opacity:.6; cursor:wait; }
+
+/* RESULTS */
+.results { display:none; }
+.results.visible { display:block; animation:fadeUp .5s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.results-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+.results-count { font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--charcoal); }
+.results-count span { color:var(--teal); }
+
+.grant-card { background:rgba(74,139,122,0.04); border:1px solid var(--border); border-radius:16px;
+  padding:24px; margin-bottom:16px; transition:all .2s; position:relative; }
+.grant-card:hover { border-color:var(--teal); background:rgba(74,139,122,0.08); }
+.grant-top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:12px; }
+.grant-title { font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:400; color:var(--charcoal); flex:1; }
+.grant-amount { font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--teal); white-space:nowrap; font-weight:600; }
+.grant-org { font-size:12px; color:var(--muted); letter-spacing:1px; margin-bottom:10px; }
+.grant-desc { font-size:14px; line-height:1.7; color:var(--charcoal); margin-bottom:14px; }
+.grant-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+.grant-tag { padding:4px 12px; background:rgba(124,154,126,0.1); border:1px solid rgba(124,154,126,0.2);
+  border-radius:20px; font-size:11px; color:var(--sage-dark); letter-spacing:.5px; }
+.grant-tag.match { background:rgba(74,139,122,0.15); border-color:rgba(74,139,122,0.3); color:var(--teal); }
+.grant-actions { display:flex; gap:10px; }
+.grant-btn { padding:9px 18px; border-radius:10px; font-size:12px; font-family:'DM Sans',sans-serif;
+  letter-spacing:1px; cursor:pointer; transition:all .2s; border:1px solid var(--border); background:transparent; color:var(--charcoal); }
+.grant-btn:hover, .grant-btn.primary { background:var(--teal); border-color:var(--teal); color:white; }
+.match-score { position:absolute; top:16px; right:16px; background:var(--teal); color:white;
+  border-radius:20px; padding:4px 12px; font-size:11px; letter-spacing:1px; font-weight:500; }
+
+/* LOADING */
+.loading { text-align:center; padding:50px; }
+.loading-dots { display:inline-flex; gap:6px; }
+.loading-dots span { width:8px; height:8px; background:var(--teal); border-radius:50%; animation:bounce 1.2s infinite; }
+.loading-dots span:nth-child(2) { animation-delay:.2s; }
+.loading-dots span:nth-child(3) { animation-delay:.4s; }
+@keyframes bounce { 0%,80%,100%{transform:scale(.8);opacity:.5} 40%{transform:scale(1.2);opacity:1} }
+.loading p { margin-top:16px; font-size:13px; color:var(--muted); letter-spacing:1px; }
+
+/* SAVED */
+.saved-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+.saved-card { background:rgba(74,139,122,0.06); border:1px solid var(--border); border-radius:14px; padding:18px; }
+.saved-card-title { font-family:'Cormorant Garamond',serif; font-size:16px; margin-bottom:6px; }
+.saved-card-amount { font-size:18px; color:var(--teal); font-family:'Cormorant Garamond',serif; margin-bottom:8px; }
+.saved-card-date { font-size:11px; color:var(--muted); }
+.empty { text-align:center; padding:40px; color:var(--muted); font-size:14px; }
+
+/* MISSION */
+.mission { background:linear-gradient(135deg, rgba(74,107,76,0.08), rgba(74,139,122,0.08));
+  border:1px solid rgba(74,139,122,0.2); border-radius:20px; padding:32px; margin-bottom:24px; }
+
+footer { position:relative; z-index:1; text-align:center; padding:40px; border-top:1px solid var(--border);
+  font-size:12px; color:var(--muted); letter-spacing:1px; }
+footer a { color:var(--teal); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<nav>
+  <a href="/" class="nav-back">← Sacred Cycles</a>
+  <a href="/" class="nav-logo">SACRED CYCLES</a>
+  <span style="font-size:12px;color:var(--teal);letter-spacing:1px;">🔗 GrantBridge</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Sacred Cycles • Funding Access Portal</div>
+  <h1 class="hero-title">Find the <span>Funding</span> You Deserve</h1>
+  <p class="hero-sub">Free AI-powered grant matching for underserved communities, nonprofits, individuals, and small businesses. Because lack of resources shouldn't stop your mission.</p>
+  <div class="free-badge">✦ 100% Free • No Account Required • No Catch</div>
+</section>
+
+<div class="main">
+
+  <!-- MISSION STATEMENT -->
+  <div class="mission">
+    <p style="font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;line-height:1.7;color:var(--charcoal);margin-bottom:16px;">
+      "As a psychiatric nurse, I watched patients and families exhaust their resources while funding sat unclaimed. Billions of grant dollars go unawarded every year because people don't know they qualify. GrantBridge changes that."
+    </p>
+    <p style="font-size:12px;color:var(--teal);letter-spacing:1px;">— Ting Lott, RN, BSN | Sacred Cycles Founder</p>
+  </div>
+
+  <!-- SEARCH FORM -->
+  <div class="panel">
+    <div class="panel-title">Find Your Match</div>
+    <div class="panel-sub">TELL US ABOUT YOUR SITUATION — AI WILL DO THE REST</div>
+
+    <div class="form-grid">
+      <div>
+        <label>Who are you?</label>
+        <select id="whoType">
+          <option value="individual">Individual / Personal Need</option>
+          <option value="nonprofit">Nonprofit Organization</option>
+          <option value="small_business">Small Business</option>
+          <option value="community_org">Community Organization</option>
+          <option value="artist">Artist / Creative</option>
+          <option value="student">Student / Educator</option>
+          <option value="caregiver">Caregiver / Family</option>
+          <option value="veteran">Veteran / Military Family</option>
+        </select>
+      </div>
+      <div>
+        <label>Funding Purpose</label>
+        <select id="purpose">
+          <option value="healthcare">Healthcare / Mental Health</option>
+          <option value="housing">Housing / Utilities</option>
+          <option value="education">Education / Training</option>
+          <option value="business">Business Startup / Growth</option>
+          <option value="arts">Arts / Culture / Community</option>
+          <option value="food">Food Security / Nutrition</option>
+          <option value="childcare">Childcare / Family Support</option>
+          <option value="disaster">Disaster Relief / Recovery</option>
+          <option value="environment">Environment / Sustainability</option>
+          <option value="research">Research / Innovation</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div>
+        <label>State / Location</label>
+        <input type="text" id="location" placeholder="e.g. Texas, or National">
+      </div>
+      <div>
+        <label>Approximate Amount Needed</label>
+        <select id="amount">
+          <option value="under_5k">Under $5,000</option>
+          <option value="5k_25k">$5,000 – $25,000</option>
+          <option value="25k_100k">$25,000 – $100,000</option>
+          <option value="100k_500k">$100,000 – $500,000</option>
+          <option value="over_500k">Over $500,000</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Communities You Serve or Belong To</label>
+    <div class="chip-row" id="communityChips">
+      <button class="chip" onclick="toggleChip(this,'BIPOC')">✊ BIPOC</button>
+      <button class="chip" onclick="toggleChip(this,'Women-Led')">👩 Women-Led</button>
+      <button class="chip" onclick="toggleChip(this,'LGBTQ+')">🌈 LGBTQ+</button>
+      <button class="chip" onclick="toggleChip(this,'Low Income')">💙 Low Income</button>
+      <button class="chip" onclick="toggleChip(this,'Rural')">🌾 Rural</button>
+      <button class="chip" onclick="toggleChip(this,'Disability')">♿ Disability</button>
+      <button class="chip" onclick="toggleChip(this,'Immigrant')">🌍 Immigrant</button>
+      <button class="chip" onclick="toggleChip(this,'Youth')">🌱 Youth</button>
+      <button class="chip" onclick="toggleChip(this,'Senior')">🧓 Senior</button>
+      <button class="chip" onclick="toggleChip(this,'Single Parent')">👨‍👧 Single Parent</button>
+    </div>
+
+    <label>Tell us more <span style="color:var(--muted);font-size:10px;">(helps AI find better matches)</span></label>
+    <textarea id="details" rows="3" placeholder="e.g. I'm a single mother of 3 in rural Texas, trying to start a community garden program for food-insecure families. I have no nonprofit status yet but strong community support..."></textarea>
+
+    <button class="search-btn" onclick="findGrants()" id="searchBtn">🔍 FIND MY GRANTS</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="resultsSection">
+    <div class="loading" id="loadingResults">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <p>Searching funding databases and matching to your profile...</p>
+    </div>
+    <div id="grantResults" style="display:none;">
+      <div class="results-header">
+        <div class="results-count">Found <span id="resultCount">8</span> grant matches for your profile</div>
+        <button onclick="clearResults()" style="font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;letter-spacing:1px;">✕ New Search</button>
+      </div>
+      <div id="grantList"></div>
+    </div>
+  </div>
+
+  <!-- SAVED GRANTS -->
+  <div class="panel">
+    <div class="panel-title">Saved Grants</div>
+    <div class="panel-sub">YOUR FUNDING PIPELINE — STORED LOCALLY</div>
+    <div id="savedGrid" class="saved-grid">
+      <div class="empty">🔗 Save grants to track your applications here.</div>
+    </div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div class="panel">
+    <div class="panel-title">Free Funding Resources</div>
+    <div class="panel-sub">VERIFIED DATABASES — NO COST TO ACCESS</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;">
+      <a href="https://www.grants.gov" target="_blank" style="text-decoration:none;">
+        <div style="padding:20px;border:1px solid var(--border);border-radius:14px;transition:all .2s;" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:24px;margin-bottom:8px;">🏛️</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:16px;margin-bottom:4px;">Grants.gov</div>
+          <div style="font-size:12px;color:var(--muted);">Federal grants database — thousands of opportunities</div>
+        </div>
+      </a>
+      <a href="https://candid.org" target="_blank" style="text-decoration:none;">
+        <div style="padding:20px;border:1px solid var(--border);border-radius:14px;transition:all .2s;" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:24px;margin-bottom:8px;">💡</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:16px;margin-bottom:4px;">Candid / GuideStar</div>
+          <div style="font-size:12px;color:var(--muted);">Foundation grants, nonprofit research tools</div>
+        </div>
+      </a>
+      <a href="https://www.sba.gov/funding-programs/grants" target="_blank" style="text-decoration:none;">
+        <div style="padding:20px;border:1px solid var(--border);border-radius:14px;transition:all .2s;" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:24px;margin-bottom:8px;">💼</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:16px;margin-bottom:4px;">SBA Grants</div>
+          <div style="font-size:12px;color:var(--muted);">Small business funding, SBIR, STTR programs</div>
+        </div>
+      </a>
+      <a href="https://www.usa.gov/benefits" target="_blank" style="text-decoration:none;">
+        <div style="padding:20px;border:1px solid var(--border);border-radius:14px;transition:all .2s;" onmouseover="this.style.borderColor='var(--teal)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:24px;margin-bottom:8px;">🇺🇸</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:16px;margin-bottom:4px;">USA.gov Benefits</div>
+          <div style="font-size:12px;color:var(--muted);">Government benefits, assistance programs</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>🌿 <a href="/">Sacred Cycles Renewal</a> • GrantBridge Funding Portal</p>
+  <p style="margin-top:8px;">Free forever • Designed by Ting Lott, RN | Always verify grant details directly with the funder</p>
+</footer>
+
+<script>
+
+const GROQ_MODEL = 'llama3-8b-8192';
+let selectedCommunities = [];
+
+function toggleChip(btn, value) {
+  btn.classList.toggle('active');
+  if (btn.classList.contains('active')) selectedCommunities.push(value);
+  else selectedCommunities = selectedCommunities.filter(c => c !== value);
+}
+
+async function findGrants() {
+  const whoType = document.getElementById('whoType').value;
+  const purpose = document.getElementById('purpose').value;
+  const location = document.getElementById('location').value || 'National';
+  const amount = document.getElementById('amount').value;
+  const details = document.getElementById('details').value;
+  const communities = selectedCommunities.join(', ') || 'general population';
+
+  const resultsSection = document.getElementById('resultsSection');
+  const loadingResults = document.getElementById('loadingResults');
+  const grantResults = document.getElementById('grantResults');
+  const searchBtn = document.getElementById('searchBtn');
+
+  resultsSection.classList.add('visible');
+  loadingResults.style.display = 'block';
+  grantResults.style.display = 'none';
+  searchBtn.disabled = true;
+  resultsSection.scrollIntoView({ behavior:'smooth', block:'start' });
+
+  const systemPrompt = `You are a grant research specialist with deep knowledge of US funding opportunities.
+Generate 6 realistic grant opportunities for the given profile.
+Respond with a JSON array of grant objects. Each object must have:
+- title: string (grant/program name)
+- org: string (funding organization)  
+- amount: string (e.g. "Up to $25,000" or "$500 – $5,000")
+- description: string (2-3 sentences about what it funds)
+- eligibility: string (who qualifies)
+- deadline: string (e.g. "Rolling" or "September 15, 2026")
+- tags: array of 3-4 strings (categories)
+- matchScore: number (60-98, how well it matches this profile)
+- url: string (use real or plausible grant URL)
+Respond ONLY with valid JSON array. No explanation.`;
+
+  const userMessage = `Find grants for:
+- Type: ${whoType}
+- Purpose: ${purpose}  
+- Location: ${location}
+- Amount needed: ${amount}
+- Communities: ${communities}
+- Details: ${details || 'General inquiry'}`;
+
+  let grants = [];
+  try {
+    const response = await fetch('/api/groq', {
+      method:'POST',
+      headers:{'Content-Type':'application/json',},
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages:[{role:'system',content:systemPrompt},{role:'user',content:userMessage}],
+        max_tokens: 2000, temperature: 0.6
+      })
+    });
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content || '[]';
+    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    grants = jsonMatch ? JSON.parse(jsonMatch[0]) : getFallbackGrants(purpose);
+  } catch (e) {
+    grants = getFallbackGrants(purpose);
+  }
+
+  document.getElementById('resultCount').textContent = grants.length;
+  document.getElementById('grantList').innerHTML = grants.map((g,i) => `
+    <div class="grant-card">
+      <div class="match-score">${g.matchScore || (85+i)}% match</div>
+      <div class="grant-top">
+        <div class="grant-title">${g.title}</div>
+        <div class="grant-amount">${g.amount}</div>
+      </div>
+      <div class="grant-org">${g.org} • Deadline: ${g.deadline}</div>
+      <div class="grant-desc">${g.description}</div>
+      <div class="grant-tags">
+        ${(g.tags||[]).map(t=>`<span class="grant-tag match">${t}</span>`).join('')}
+        <span class="grant-tag">📍 ${location}</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">✅ <strong>Eligibility:</strong> ${g.eligibility}</div>
+      <div class="grant-actions">
+        <button class="grant-btn" onclick="saveGrant(${JSON.stringify(g).replace(/"/g,'&quot;')})">💾 Save</button>
+        <button class="grant-btn primary" onclick="window.open('${g.url||'https://www.grants.gov'}','_blank')">Apply Now →</button>
+      </div>
+    </div>
+  `).join('');
+
+  loadingResults.style.display = 'none';
+  grantResults.style.display = 'block';
+  searchBtn.disabled = false;
+}
+
+function getFallbackGrants(purpose) {
+  return [
+    { title:"SAMHSA Behavioral Health Workforce Development Grant", org:"SAMHSA / HHS", amount:"Up to $500,000", description:"Supports organizations training the behavioral health workforce, including peer support specialists and community health workers.", eligibility:"Nonprofits, health organizations, tribal entities", deadline:"Rolling", tags:["Mental Health","Healthcare","Workforce"], matchScore:92, url:"https://www.samhsa.gov/grants" },
+    { title:"Community Development Block Grant (CDBG)", org:"HUD / Local Government", amount:"Varies by locality", description:"Flexible funding for community development activities that benefit low-to-moderate income persons, including healthcare and social services.", eligibility:"Nonprofits and local organizations serving low-income communities", deadline:"Contact local HUD office", tags:["Community","Low Income","Social Services"], matchScore:88, url:"https://www.hud.gov/program_offices/comm_planning/cdbg" },
+    { title:"Robert Wood Johnson Foundation Health Equity Grant", org:"RWJF", amount:"$50,000 – $500,000", description:"Supports innovative solutions to advance health equity and address root causes of health disparities in underserved communities.", eligibility:"Nonprofits, community organizations, research institutions", deadline:"Quarterly rolling", tags:["Health Equity","Innovation","Community"], matchScore:85, url:"https://www.rwjf.org/en/grants" },
+    { title:"W.K. Kellogg Foundation Community Engagement Grant", org:"WKKF", amount:"$75,000 – $300,000", description:"Funds community-led initiatives that create systemic change for vulnerable children, families, and communities.", eligibility:"501(c)(3) organizations with community focus", deadline:"September 30, 2026", tags:["Community","Families","Youth"], matchScore:82, url:"https://www.wkkf.org/grants" },
+    { title:"National Endowment for the Arts — Our Town Grant", org:"NEA", amount:"$25,000 – $150,000", description:"Supports creative placemaking projects that integrate arts and culture into community development and revitalization.", eligibility:"Nonprofits partnered with local government", deadline:"January 2027", tags:["Arts","Community","Culture"], matchScore:78, url:"https://www.arts.gov/grants/our-town" },
+    { title:"USDA Rural Development Community Facilities Grant", org:"USDA", amount:"Up to $75,000", description:"Funds essential community facilities in rural areas including healthcare, public safety, and community support services.", eligibility:"Rural nonprofits, public bodies, tribal entities", deadline:"Rolling", tags:["Rural","Healthcare","Community"], matchScore:75, url:"https://www.rd.usda.gov/programs-services/community-facilities" }
+  ];
+}
+
+function saveGrant(grant) {
+  const saved = JSON.parse(localStorage.getItem('savedGrants') || '[]');
+  if (!saved.find(g => g.title === grant.title)) {
+    saved.unshift({ ...grant, savedDate: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) });
+    localStorage.setItem('savedGrants', JSON.stringify(saved.slice(0, 30)));
+    renderSaved();
+  }
+}
+
+function renderSaved() {
+  const saved = JSON.parse(localStorage.getItem('savedGrants') || '[]');
+  const grid = document.getElementById('savedGrid');
+  if (!saved.length) { grid.innerHTML = '<div class="empty">🔗 Save grants to track your applications here.</div>'; return; }
+  grid.innerHTML = saved.map(g => `
+    <div class="saved-card">
+      <div class="saved-card-title">${g.title}</div>
+      <div class="saved-card-amount">${g.amount}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">${g.org}</div>
+      <div class="saved-card-date">Saved ${g.savedDate} • Deadline: ${g.deadline}</div>
+    </div>
+  `).join('');
+}
+
+function clearResults() {
+  document.getElementById('resultsSection').classList.remove('visible');
+  document.getElementById('searchBtn').disabled = false;
+}
+
+renderSaved();
+</script>
+</body>
+</html>

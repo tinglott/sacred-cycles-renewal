@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ComedyEngine — AI Laughter Therapy | Sacred Cycles</title>
+<meta name="description" content="AI-powered laughter therapy. Clinically proven: laughing reduces cortisol by 37%, boosts immunity, and restores your nervous system. Free from Sacred Cycles.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C4975A; --gold-light: #E8C98A; --gold-dark: #8B6B30;
+  --cream: #F5F0E8; --warm-white: #FDFAF4; --charcoal: #2C2C2C;
+  --muted: #8A8578; --sage: #7C9A7E; --blush: #D4A5A0;
+  --stage: #1A1008; --spotlight: rgba(196,151,90,0.15);
+  --panel: rgba(255,255,255,0.85); --border: rgba(196,151,90,0.25);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--cream); color:var(--charcoal); font-family:'DM Sans',sans-serif; font-weight:300; min-height:100vh; overflow-x:hidden; }
+
+.bg { position:fixed; inset:0; z-index:0;
+  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(196,151,90,0.2) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 40% at 20% 80%, rgba(124,154,126,0.15) 0%, transparent 60%), var(--cream); }
+
+nav { position:sticky; top:0; z-index:100; background:rgba(253,250,244,0.92); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border); padding:14px 40px; display:flex; align-items:center; justify-content:space-between; }
+.nav-logo { font-family:'Cinzel',serif; font-size:13px; letter-spacing:3px; color:var(--gold-dark); text-decoration:none; }
+.nav-back { font-size:12px; color:var(--muted); text-decoration:none; letter-spacing:1px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+.nav-back:hover { color:var(--gold-dark); }
+
+.hero { position:relative; z-index:1; text-align:center; padding:80px 40px 60px; }
+.hero-eyebrow { font-family:'Cinzel',serif; font-size:11px; letter-spacing:4px; color:var(--gold); margin-bottom:16px; }
+.hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(42px,6vw,72px); font-weight:300; line-height:1.1; margin-bottom:20px; }
+.hero-title span { color:var(--gold); font-style:italic; }
+.hero-sub { font-size:15px; color:var(--muted); max-width:520px; margin:0 auto 30px; line-height:1.7; }
+.rn-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(196,151,90,0.12);
+  border:1px solid var(--border); border-radius:30px; padding:8px 18px; font-size:12px; color:var(--gold-dark); letter-spacing:1px; }
+
+.main { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:0 24px 80px; }
+.panel { background:var(--panel); border:1px solid var(--border); border-radius:20px; padding:32px; margin-bottom:24px;
+  box-shadow:0 4px 24px rgba(196,151,90,0.08); backdrop-filter:blur(8px); }
+.panel-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; margin-bottom:6px; }
+.panel-sub { font-size:12px; color:var(--muted); letter-spacing:1px; margin-bottom:24px; }
+
+/* PERSONAS */
+.persona-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin-bottom:24px; }
+.persona-card { padding:16px; border:2px solid var(--border); border-radius:14px; text-align:center; cursor:pointer; transition:all .2s; background:transparent; }
+.persona-card:hover, .persona-card.active { border-color:var(--gold); background:rgba(196,151,90,0.08); }
+.persona-emoji { font-size:32px; margin-bottom:8px; }
+.persona-name { font-size:13px; font-weight:500; color:var(--charcoal); margin-bottom:2px; }
+.persona-style { font-size:11px; color:var(--muted); }
+
+/* CHIPS */
+.chip-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.chip { padding:8px 16px; border-radius:30px; border:1px solid var(--border); background:transparent;
+  font-size:12px; font-family:'DM Sans',sans-serif; color:var(--muted); cursor:pointer; transition:all .2s; }
+.chip:hover, .chip.active { background:var(--gold); border-color:var(--gold); color:white; }
+
+label { display:block; font-size:12px; letter-spacing:1.5px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; }
+textarea { width:100%; background:rgba(196,151,90,0.05); border:1px solid var(--border); border-radius:12px;
+  padding:14px 18px; font-size:14px; font-family:'DM Sans',sans-serif; color:var(--charcoal); resize:none; outline:none; transition:border .2s; }
+textarea:focus { border-color:var(--gold); }
+
+.generate-btn { width:100%; padding:18px; background:linear-gradient(135deg, var(--gold-dark), var(--gold));
+  border:none; border-radius:14px; color:white; font-size:15px; font-family:'DM Sans',sans-serif;
+  letter-spacing:2px; cursor:pointer; transition:all .3s; margin-top:20px; }
+.generate-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(196,151,90,0.4); }
+.generate-btn:disabled { opacity:.6; cursor:wait; }
+
+/* STAGE */
+.stage { display:none; }
+.stage.visible { display:block; animation:fadeUp .5s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.stage-bg { background:linear-gradient(180deg, var(--stage) 0%, #2a1a06 100%);
+  border-radius:20px; padding:40px 32px; position:relative; overflow:hidden; margin-bottom:16px; }
+.stage-bg::before { content:''; position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+  width:200px; height:200px; background:radial-gradient(circle, rgba(196,151,90,0.4) 0%, transparent 70%);
+  border-radius:50%; }
+.stage-persona { text-align:center; margin-bottom:24px; position:relative; z-index:1; }
+.stage-emoji { font-size:56px; margin-bottom:8px; }
+.stage-name { font-family:'Cinzel',serif; font-size:14px; letter-spacing:3px; color:var(--gold-light); }
+.joke-text { font-family:'Cormorant Garamond',serif; font-size:clamp(18px,3vw,26px); line-height:1.7;
+  color:var(--gold-light); text-align:center; position:relative; z-index:1; padding:0 20px; }
+.joke-text .punchline { color:white; font-weight:600; }
+
+.loading { text-align:center; padding:40px; }
+.loading-dots { display:inline-flex; gap:6px; }
+.loading-dots span { width:8px; height:8px; background:var(--gold); border-radius:50%; animation:bounce 1.2s infinite; }
+.loading-dots span:nth-child(2) { animation-delay:.2s; }
+.loading-dots span:nth-child(3) { animation-delay:.4s; }
+@keyframes bounce { 0%,80%,100% { transform:scale(.8); opacity:.5; } 40% { transform:scale(1.2); opacity:1; } }
+
+/* REACTIONS */
+.reactions { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin:16px 0; }
+.reaction { font-size:24px; animation:pop .3s ease; }
+@keyframes pop { from { transform:scale(0); } to { transform:scale(1); } }
+
+.action-row { display:flex; gap:12px; flex-wrap:wrap; }
+.action-btn { flex:1; min-width:120px; padding:12px 20px; border-radius:10px; border:1px solid var(--border);
+  font-size:12px; font-family:'DM Sans',sans-serif; letter-spacing:1px; cursor:pointer;
+  background:transparent; color:var(--charcoal); transition:all .2s; }
+.action-btn:hover { background:var(--gold); border-color:var(--gold); color:white; }
+.action-btn.primary { background:var(--gold); border-color:var(--gold); color:white; }
+
+/* SPEAK */
+.speak-btn { display:flex; align-items:center; gap:8px; padding:10px 20px; border-radius:30px;
+  border:1px solid var(--border); background:transparent; font-size:12px; font-family:'DM Sans',sans-serif;
+  cursor:pointer; color:var(--muted); transition:all .2s; letter-spacing:1px; }
+.speak-btn:hover { background:var(--gold); border-color:var(--gold); color:white; }
+.speak-btn.speaking { background:var(--gold); border-color:var(--gold); color:white; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.7; } }
+
+/* HISTORY */
+.history-list { display:flex; flex-direction:column; gap:12px; }
+.history-item { background:rgba(196,151,90,0.06); border:1px solid var(--border); border-radius:12px; padding:16px 20px; }
+.history-meta { font-size:11px; color:var(--gold); letter-spacing:1px; margin-bottom:8px; }
+.history-joke { font-family:'Cormorant Garamond',serif; font-size:15px; line-height:1.6; color:var(--charcoal); }
+.empty { text-align:center; padding:40px; color:var(--muted); font-size:14px; }
+
+/* SCIENCE */
+.science-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; }
+.stat-box { text-align:center; padding:20px; background:rgba(196,151,90,0.06); border:1px solid var(--border); border-radius:14px; }
+.stat-num { font-family:'Cormorant Garamond',serif; font-size:40px; color:var(--gold-dark); margin-bottom:4px; }
+.stat-desc { font-size:12px; color:var(--muted); line-height:1.5; }
+
+footer { position:relative; z-index:1; text-align:center; padding:40px; border-top:1px solid var(--border);
+  font-size:12px; color:var(--muted); letter-spacing:1px; }
+footer a { color:var(--gold); text-decoration:none; }
+
+@media(max-width:600px) {
+  nav { padding:14px 20px; }
+  .hero { padding:60px 20px 40px; }
+  .main { padding:0 16px 60px; }
+  .panel { padding:22px; }
+  .persona-grid { grid-template-columns:repeat(3,1fr); }
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<nav>
+  <a href="/" class="nav-back">← Sacred Cycles</a>
+  <a href="/" class="nav-logo">SACRED CYCLES</a>
+  <span style="font-size:12px;color:var(--gold);letter-spacing:1px;">🎤 ComedyEngine</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Sacred Cycles • Laughter Therapy Studio</div>
+  <h1 class="hero-title">Laugh Your Way to <span>Healing</span></h1>
+  <p class="hero-sub">Clinically proven: laughter reduces cortisol by 37%, boosts immunity by 40%, and is the fastest natural antidepressant available — and it's completely free.</p>
+  <div class="rn-badge">🩺 Prescribed by Ting Lott, RN — Psychiatric Nurse, 18 Years</div>
+</section>
+
+<div class="main">
+
+  <!-- GENERATOR -->
+  <div class="panel">
+    <div class="panel-title">Choose Your Comedian</div>
+    <div class="panel-sub">PICK YOUR AI COMEDY THERAPIST</div>
+
+    <div class="persona-grid" id="personaGrid">
+      <div class="persona-card active" data-persona="Rex" onclick="selectPersona(this)">
+        <div class="persona-emoji">🤠</div>
+        <div class="persona-name">Rex</div>
+        <div class="persona-style">Southern Wit</div>
+      </div>
+      <div class="persona-card" data-persona="Maya" onclick="selectPersona(this)">
+        <div class="persona-emoji">💃</div>
+        <div class="persona-name">Maya</div>
+        <div class="persona-style">Sassy & Sharp</div>
+      </div>
+      <div class="persona-card" data-persona="Benny" onclick="selectPersona(this)">
+        <div class="persona-emoji">🎩</div>
+        <div class="persona-name">Benny</div>
+        <div class="persona-style">Old School</div>
+      </div>
+      <div class="persona-card" data-persona="Zara" onclick="selectPersona(this)">
+        <div class="persona-emoji">🌟</div>
+        <div class="persona-name">Zara</div>
+        <div class="persona-style">Observational</div>
+      </div>
+      <div class="persona-card" data-persona="Dr. Chuckles" onclick="selectPersona(this)">
+        <div class="persona-emoji">👩‍⚕️</div>
+        <div class="persona-name">Dr. Chuckles</div>
+        <div class="persona-style">Medical Comedy</div>
+      </div>
+    </div>
+
+    <label>Comedy Style</label>
+    <div class="chip-row" id="styleChips">
+      <button class="chip active" onclick="selectChip(this,'style','Stand-Up')">🎤 Stand-Up</button>
+      <button class="chip" onclick="selectChip(this,'style','One-Liners')">⚡ One-Liners</button>
+      <button class="chip" onclick="selectChip(this,'style','Self-Deprecating')">🙈 Self-Dep</button>
+      <button class="chip" onclick="selectChip(this,'style','Observational')">🔍 Observational</button>
+      <button class="chip" onclick="selectChip(this,'style','Absurdist')">🌀 Absurdist</button>
+      <button class="chip" onclick="selectChip(this,'style','Clean Family')">👨‍👩‍👧 Family</button>
+    </div>
+
+    <label>Topic</label>
+    <div class="chip-row" id="topicChips">
+      <button class="chip active" onclick="selectChip(this,'topic','everyday life')">😄 Life</button>
+      <button class="chip" onclick="selectChip(this,'topic','work and bosses')">💼 Work</button>
+      <button class="chip" onclick="selectChip(this,'topic','healthcare and nurses')">🏥 Healthcare</button>
+      <button class="chip" onclick="selectChip(this,'topic','aging and getting older')">👴 Aging</button>
+      <button class="chip" onclick="selectChip(this,'topic','technology and AI')">🤖 Tech</button>
+      <button class="chip" onclick="selectChip(this,'topic','family and relationships')">❤️ Family</button>
+      <button class="chip" onclick="selectChip(this,'topic','food and dieting')">🍕 Food</button>
+      <button class="chip" onclick="selectChip(this,'topic','mental health and therapy')">🧠 Mental Health</button>
+    </div>
+
+    <label style="margin-top:4px;">What needs a laugh today? <span style="color:var(--muted);font-size:10px;">(optional)</span></label>
+    <textarea id="context" rows="2" placeholder="e.g. My Monday was rough. My boss, my traffic, my... everything."></textarea>
+
+    <button class="generate-btn" onclick="generateJoke()" id="genBtn">🎤 TAKE THE STAGE</button>
+  </div>
+
+  <!-- STAGE -->
+  <div class="panel stage" id="stagePanel">
+    <div class="loading" id="loadingState">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <p style="margin-top:16px;font-size:13px;color:var(--muted);">The comedian is warming up...</p>
+    </div>
+    <div id="performanceState" style="display:none;">
+      <div class="stage-bg">
+        <div class="stage-persona">
+          <div class="stage-emoji" id="stageEmoji">🤠</div>
+          <div class="stage-name" id="stageName">REX</div>
+        </div>
+        <div class="joke-text" id="jokeDisplay"></div>
+      </div>
+      <div class="reactions" id="reactionsRow"></div>
+      <div style="display:flex;justify-content:center;margin-bottom:16px;">
+        <button class="speak-btn" id="speakBtn" onclick="speakJoke()">🔊 Hear it out loud</button>
+      </div>
+      <div class="action-row">
+        <button class="action-btn" onclick="saveJoke()">📓 Save</button>
+        <button class="action-btn" onclick="fireReactions()">😂 React</button>
+        <button class="action-btn primary" onclick="generateJoke()">🎤 Next Bit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCIENCE -->
+  <div class="panel">
+    <div class="panel-title">Laughter Is Literally Medicine</div>
+    <div class="panel-sub">CLINICAL EVIDENCE FROM YOUR PSYCHIATRIC NURSE</div>
+    <div class="science-grid">
+      <div class="stat-box"><div class="stat-num">37%</div><div class="stat-desc">cortisol reduction after genuine laughter</div></div>
+      <div class="stat-box"><div class="stat-num">40%</div><div class="stat-desc">boost in natural killer cell immunity</div></div>
+      <div class="stat-box"><div class="stat-num">15min</div><div class="stat-desc">of laughter = 30min meditation for heart rate</div></div>
+      <div class="stat-box"><div class="stat-num">87%</div><div class="stat-desc">of patients report mood lift after laughter therapy</div></div>
+    </div>
+    <div style="margin-top:24px;background:rgba(196,151,90,0.08);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:20px 24px;">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;line-height:1.7;">
+        "In psych nursing, we called laughter 'the great reset.' A patient who hasn't smiled in weeks will crack — and something physically shifts. I've seen it hundreds of times. Your body doesn't know the difference between real and fake laughter. It releases endorphins either way. So we prescribed it."
+      </p>
+      <p style="font-size:12px;color:var(--gold);letter-spacing:1px;margin-top:12px;">— Ting Lott, RN, BSN | Sacred Cycles Founder</p>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="panel">
+    <div class="panel-title">Your Comedy Journal</div>
+    <div class="panel-sub">SAVED BITS — RETURN TO THEM ON HARD DAYS</div>
+    <div id="historyList" class="history-list">
+      <div class="empty">🎤 Your saved jokes will appear here.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>🌿 <a href="/">Sacred Cycles Renewal</a> • ComedyEngine Laughter Therapy</p>
+  <p style="margin-top:8px;">Designed by Ting Lott, RN | Clean comedy — safe for all audiences</p>
+</footer>
+
+<script>
+
+const GROQ_MODEL = 'llama3-8b-8192';
+
+const personas = {
+  'Rex': { emoji:'🤠', style:'a charming Southern comedian with dry wit and folksy wisdom' },
+  'Maya': { emoji:'💃', style:'a sharp, confident woman comedian with sassy observational humor' },
+  'Benny': { emoji:'🎩', style:'a classic old-school comedian with clean Borscht Belt style jokes' },
+  'Zara': { emoji:'🌟', style:'a sharp observational comedian who notices what everyone else misses' },
+  'Dr. Chuckles': { emoji:'👩‍⚕️', style:'a nurse comedian who finds the absurdity in healthcare and hospital life' }
+};
+
+let selected = { persona:'Rex', style:'Stand-Up', topic:'everyday life' };
+let currentJoke = '';
+let speechSynth = window.speechSynthesis;
+
+function selectPersona(card) {
+  document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  selected.persona = card.dataset.persona;
+}
+
+function selectChip(btn, type, value) {
+  btn.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  selected[type] = value;
+}
+
+async function generateJoke() {
+  const context = document.getElementById('context').value;
+  const stagePanel = document.getElementById('stagePanel');
+  const loadingState = document.getElementById('loadingState');
+  const perfState = document.getElementById('performanceState');
+  const genBtn = document.getElementById('genBtn');
+
+  stagePanel.classList.add('visible');
+  loadingState.style.display = 'block';
+  perfState.style.display = 'none';
+  genBtn.disabled = true;
+  stagePanel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  const persona = personas[selected.persona];
+  const systemPrompt = `You are ${selected.persona}, ${persona.style}. 
+You are performing ${selected.style} comedy for a therapeutic laughter session.
+Generate ONE complete joke or comedy bit about ${selected.topic}.
+Keep it clean, warm, and genuinely funny. End with a clear punchline.
+${context ? `The audience member mentioned: "${context}" — incorporate this naturally if possible.` : ''}
+Respond with ONLY the joke. No intro. No explanation.`;
+
+  try {
+    const response = await fetch('/api/groq', {
+      method:'POST',
+      headers: { 'Content-Type':'application/json',  },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages: [{ role:'user', content:systemPrompt }],
+        max_tokens: 300, temperature: 0.9
+      })
+    });
+    const data = await response.json();
+    currentJoke = data.choices?.[0]?.message?.content?.trim() || getFallbackJoke();
+  } catch (e) {
+    currentJoke = getFallbackJoke();
+  }
+
+  document.getElementById('stageEmoji').textContent = persona.emoji;
+  document.getElementById('stageName').textContent = selected.persona.toUpperCase();
+
+  // Format joke with punchline highlight
+  const lines = currentJoke.split('\n').filter(l => l.trim());
+  if (lines.length > 1) {
+    const setup = lines.slice(0,-1).join('<br>');
+    const punchline = lines[lines.length-1];
+    document.getElementById('jokeDisplay').innerHTML = `${setup}<br><br><span class="punchline">${punchline}</span>`;
+  } else {
+    document.getElementById('jokeDisplay').textContent = currentJoke;
+  }
+
+  document.getElementById('reactionsRow').innerHTML = '';
+  loadingState.style.display = 'none';
+  perfState.style.display = 'block';
+  genBtn.disabled = false;
+
+  // Auto-fire reactions after a moment
+  setTimeout(fireReactions, 1200);
+}
+
+function getFallbackJoke() {
+  const jokes = [
+    "I told my therapist I feel like nobody listens to me.\n\nShe said, 'Next patient please.'",
+    "Being a nurse means you've seen it all.\n\nAnd by 'it all,' I mean things that will haunt your lunch breaks forever.",
+    "My doctor said I need to watch my drinking.\n\nSo now I do it in front of a mirror.",
+    "They say laughter is the best medicine.\n\nMy pharmacist disagrees, but she doesn't have my sense of humor.",
+    "I finally got 8 hours of sleep last night.\n\nTook me four days, but I got there."
+  ];
+  return jokes[Math.floor(Math.random() * jokes.length)];
+}
+
+function fireReactions() {
+  const emojis = ['😂','🤣','💀','😆','👏','🎤','🔥','😄'];
+  const row = document.getElementById('reactionsRow');
+  row.innerHTML = '';
+  const count = 5 + Math.floor(Math.random() * 5);
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const span = document.createElement('span');
+      span.className = 'reaction';
+      span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      row.appendChild(span);
+    }, i * 120);
+  }
+}
+
+function speakJoke() {
+  if (speechSynth.speaking) { speechSynth.cancel(); updateSpeakBtn(false); return; }
+  const utterance = new SpeechSynthesisUtterance(currentJoke);
+  utterance.rate = 0.9; utterance.pitch = 1.1;
+  utterance.onend = () => updateSpeakBtn(false);
+  speechSynth.speak(utterance);
+  updateSpeakBtn(true);
+}
+
+function updateSpeakBtn(speaking) {
+  const btn = document.getElementById('speakBtn');
+  btn.classList.toggle('speaking', speaking);
+  btn.textContent = speaking ? '⏹ Stop' : '🔊 Hear it out loud';
+}
+
+function saveJoke() {
+  const history = JSON.parse(localStorage.getItem('comedyJournal') || '[]');
+  history.unshift({ joke:currentJoke, persona:selected.persona, topic:selected.topic, date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) });
+  localStorage.setItem('comedyJournal', JSON.stringify(history.slice(0,20)));
+  renderHistory();
+  const btns = document.querySelectorAll('#stagePanel .action-btn');
+  btns[0].textContent = '✅ Saved!';
+  setTimeout(() => btns[0].textContent = '📓 Save', 2000);
+}
+
+function renderHistory() {
+  const history = JSON.parse(localStorage.getItem('comedyJournal') || '[]');
+  const list = document.getElementById('historyList');
+  if (!history.length) { list.innerHTML = '<div class="empty">🎤 Your saved jokes will appear here.</div>'; return; }
+  list.innerHTML = history.map(h => `
+    <div class="history-item">
+      <div class="history-meta">${h.persona} • ${h.topic} • ${h.date}</div>
+      <div class="history-joke">${h.joke.replace(/\n/g,'<br>')}</div>
+    </div>
+  `).join('');
+}
+
+renderHistory();
+</script>
+</body>
+</html>
