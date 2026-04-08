@@ -870,7 +870,29 @@
       font-size: 0.95rem;
       line-height: 1.7;
     }
+
+    /* ===== FEATURED VIDEOS ===== */
+    .featured-videos { background: linear-gradient(180deg, #0d2818, #1a3c2a); }
+    .featured-videos h2 { color: #faf7f0; }
+    .video-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px; margin-top: 50px;
+    }
+    .video-card {
+      background: rgba(250,247,240,0.04);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 20px; padding: 24px; text-align: center;
+      transition: all 0.4s ease;
+    }
+    .video-card:hover {
+      border-color: rgba(201,168,76,0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(201,168,76,0.1);
+    }
+    .video-card h3 { color: #faf7f0; font-size: 1.2rem; margin-top: 16px; margin-bottom: 8px; }
+    .video-card p { color: rgba(250,247,240,0.6); font-size: 0.9rem; line-height: 1.6; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@mux/mux-player@3"></script>
 </head>
 <body>
   <!-- Skip Link -->
@@ -889,6 +911,7 @@
       <div class="nav-links" role="menubar">
         <a href="#hero" role="menuitem">Home</a>
         <a href="#about" role="menuitem">About</a>
+        <a href="#videos" role="menuitem">Videos</a>
         <a href="#program" role="menuitem">Program</a>
         <a href="#pricing" role="menuitem">Pricing</a>
         <a href="#books" role="menuitem">Books</a>
@@ -964,6 +987,65 @@
           "After 18 years as a psychiatric nurse serving those who couldn't afford help, I developed Sacred Cycles to bring clinical-grade healing techniques to everyone ready to invest in their transformation."
           <br /><strong style="font-style:normal; color:#c9a84c;">— T. Lott, RN</strong>
         </blockquote>
+      </div>
+    </section>
+
+
+    <!-- ===== FEATURED VIDEOS ===== -->
+    <section class="featured-videos section-padding" id="videos" aria-label="Featured Videos">
+      <div class="container">
+        <div class="text-center">
+          <p class="section-subtitle reveal">Watch &amp; Experience</p>
+          <h2 class="reveal">🎬 Featured Videos</h2>
+          <div class="section-divider reveal"></div>
+          <p class="reveal" style="color:rgba(250,247,240,0.7); max-width:650px; margin:0 auto 10px;">
+            Preview our healing experiences through video — from wellness programs to audiobook collections and creative storytelling.
+          </p>
+        </div>
+
+        <div class="video-grid">
+          <div class="video-card reveal reveal-delay-1">
+            <mux-player
+              playback-id="SrwUgxDMrfskdPabprIvI33fpgRfW6uArXP00FarZfbI"
+              metadata-video-title="Sacred Cycles Wellness"
+              accent-color="#c9a84c"
+              style="width: 100%; aspect-ratio: 16/9; border-radius: 12px;"
+              poster="https://image.mux.com/SrwUgxDMrfskdPabprIvI33fpgRfW6uArXP00FarZfbI/thumbnail.jpg"
+              stream-type="on-demand"
+              default-hidden-captions
+            ></mux-player>
+            <h3>Sacred Cycles Wellness</h3>
+            <p>Discover the transformative 8-week holistic wellness program designed by T. Lott, RN — integrating five powerful healing modalities.</p>
+          </div>
+
+          <div class="video-card reveal reveal-delay-2">
+            <mux-player
+              playback-id="Vo7dmy38GRSsgvzhqDdzEsb4aM02gUbL01tvMF6Ebtnl4"
+              metadata-video-title="Artistry Store Audiobooks"
+              accent-color="#c9a84c"
+              style="width: 100%; aspect-ratio: 16/9; border-radius: 12px;"
+              poster="https://image.mux.com/Vo7dmy38GRSsgvzhqDdzEsb4aM02gUbL01tvMF6Ebtnl4/thumbnail.jpg"
+              stream-type="on-demand"
+              default-hidden-captions
+            ></mux-player>
+            <h3>Artistry Store Audiobooks</h3>
+            <p>Explore our collection of premium audiobooks spanning spiritual growth, wellness, and creative expression — available on the Artistry Store.</p>
+          </div>
+
+          <div class="video-card reveal reveal-delay-3">
+            <mux-player
+              playback-id="n8yEHZ1V01IWfsR01OLWif6VOn1eAZjcCDdkbVSbFruFU"
+              metadata-video-title="Golpo Canvas Promo"
+              accent-color="#c9a84c"
+              style="width: 100%; aspect-ratio: 16/9; border-radius: 12px;"
+              poster="https://image.mux.com/n8yEHZ1V01IWfsR01OLWif6VOn1eAZjcCDdkbVSbFruFU/thumbnail.jpg"
+              stream-type="on-demand"
+              default-hidden-captions
+            ></mux-player>
+            <h3>Golpo Canvas Promo</h3>
+            <p>A creative storytelling experience that brings art, narrative, and digital expression together in a beautiful new way.</p>
+          </div>
+        </div>
       </div>
     </section>
 
