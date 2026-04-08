@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sacred Cycles — Business Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --sage: #4A6B4C;
+  --sage-light: #7C9A7E;
+  --sage-lighter: #A8C4A2;
+  --cream: #F5F0E8;
+  --warm-white: #FDFAF4;
+  --gold: #C4975A;
+  --gold-light: #E8C98A;
+  --charcoal: #2C2C2C;
+  --muted: #8A8578;
+  --blush: #D4A5A0;
+  --deep: #1A2E1B;
+  --panel-bg: rgba(255,255,255,0.88);
+  --panel-border: rgba(74,107,76,0.14);
+  --shadow: 0 4px 24px rgba(26,46,27,0.07);
+  --shadow-hover: 0 8px 40px rgba(26,46,27,0.13);
+  --sidebar-w: 240px;
+  --topbar-h: 64px;
+  --transition: all 0.25s ease;
+}
+[data-theme="dark"] {
+  --cream: #12201a;
+  --warm-white: #1a2e1b;
+  --charcoal: #F0EBE0;
+  --muted: #9aab95;
+  --panel-bg: rgba(26,46,27,0.92);
+  --panel-border: rgba(168,196,162,0.18);
+  --shadow: 0 4px 24px rgba(0,0,0,0.22);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-size: 15px; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  display: flex;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--deep);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  z-index: 100;
+  transition: transform 0.3s;
+}
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(196,151,90,0.15);
+}
+.sidebar-logo .logo-main {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  color: var(--gold-light);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+.sidebar-logo .logo-sub {
+  font-size: 0.72rem;
+  color: rgba(168,196,162,0.6);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.sidebar-nav { flex: 1; padding: 16px 0; overflow-y: auto; }
+.nav-section-label {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(168,196,162,0.4);
+  padding: 16px 24px 6px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 24px;
+  color: rgba(240,235,224,0.7);
+  font-size: 0.875rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: var(--transition);
+  border-left: 3px solid transparent;
+  text-decoration: none;
+}
+.nav-item:hover, .nav-item.active {
+  color: var(--gold-light);
+  background: rgba(196,151,90,0.08);
+  border-left-color: var(--gold);
+}
+.nav-item .icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-item .badge {
+  margin-left: auto;
+  background: var(--gold);
+  color: var(--deep);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(196,151,90,0.1);
+}
+.sidebar-avatar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sage), var(--gold));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: white;
+  font-weight: 600;
+}
+.avatar-info .name { color: var(--gold-light); font-size: 0.82rem; font-weight: 500; }
+.avatar-info .role { color: rgba(168,196,162,0.5); font-size: 0.68rem; letter-spacing: 1px; }
+
+/* ===== MAIN ===== */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  background: var(--warm-white);
+  border-bottom: 1px solid var(--panel-border);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  backdrop-filter: blur(8px);
+}
+.topbar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: var(--sage);
+  font-weight: 400;
+}
+.topbar-title span { color: var(--gold); font-style: italic; }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.search-input {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 30px;
+  padding: 8px 16px;
+  width: 240px;
+  font-size: 0.82rem;
+  color: var(--charcoal);
+  outline: none;
+  transition: var(--transition);
+}
+.search-input:focus { border-color: var(--sage-light); box-shadow: 0 0 0 3px rgba(124,154,126,0.1); }
+.topbar-badge {
+  background: linear-gradient(135deg, var(--sage), var(--sage-light));
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+.date-chip {
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  position: relative;
+  padding: 6px;
+  border-radius: 8px;
+  transition: var(--transition);
+}
+.icon-btn:hover { background: var(--panel-bg); }
+.notif-dot {
+  position: absolute;
+  top: 2px; right: 2px;
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+/* ===== CONTENT AREA ===== */
+.content { padding: 24px 28px; flex: 1; }
+
+/* ===== STATS ROW ===== */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.stat-card.green::before { background: linear-gradient(90deg, var(--sage), var(--sage-lighter)); }
+.stat-card.gold::before { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+.stat-card.blush::before { background: linear-gradient(90deg, var(--blush), #e8b5b0); }
+.stat-card.deep::before { background: linear-gradient(90deg, var(--deep), var(--sage)); }
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.stat-value { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 600; color: var(--sage); line-height: 1; }
+.stat-value.gold { color: var(--gold); }
+.stat-change { font-size: 0.75rem; margin-top: 6px; }
+.stat-change.up { color: #5a9a5c; }
+.stat-change.down { color: #c0706a; }
+.stat-icon { position: absolute; top: 18px; right: 18px; font-size: 1.6rem; opacity: 0.15; }
+
+/* ===== GRID LAYOUTS ===== */
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 20px; }
+.grid-full { margin-bottom: 20px; }
+
+/* ===== PANEL ===== */
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.panel-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--sage);
+}
+.panel-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+.panel-action {
+  font-size: 0.75rem;
+  color: var(--sage-light);
+  background: none;
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: 'DM Sans', sans-serif;
+}
+.panel-action:hover { background: var(--sage); color: white; border-color: var(--sage); }
+
+/* ===== TIER LIST ===== */
+.tier-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--panel-border);
+}
+.tier-item:last-child { border-bottom: none; }
+.tier-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.tier-info { flex: 1; }
+.tier-name { font-size: 0.85rem; font-weight: 500; color: var(--charcoal); }
+.tier-count { font-size: 0.72rem; color: var(--muted); }
+.tier-bar-wrap { width: 80px; }
+.tier-bar { height: 4px; background: var(--panel-border); border-radius: 4px; overflow: hidden; }
+.tier-bar-fill { height: 100%; border-radius: 4px; transition: width 1.2s ease; }
+.tier-pct { font-size: 0.72rem; color: var(--muted); text-align: right; margin-top: 2px; }
+
+/* ===== STILL WATERS ===== */
+.still-waters {
+  background: linear-gradient(160deg, var(--deep) 0%, #1e3d22 60%, #234d35 100%);
+  border-radius: 16px;
+  padding: 28px 24px;
+  color: rgba(240,235,224,0.9);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.still-waters::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: rgba(196,151,90,0.07);
+}
+.still-waters::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: -20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(124,154,126,0.08);
+}
+.sw-label {
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(196,151,90,0.7);
+  margin-bottom: 10px;
+}
+.sw-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: rgba(240,235,224,0.85);
+  font-style: italic;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 16px;
+}
+.sw-source { font-size: 0.72rem; color: rgba(196,151,90,0.7); letter-spacing: 1px; }
+.sw-refresh {
+  position: absolute;
+  top: 18px; right: 18px;
+  background: none;
+  border: 1px solid rgba(196,151,90,0.2);
+  color: rgba(196,151,90,0.6);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: var(--transition);
+  z-index: 1;
+}
+.sw-refresh:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ===== ACTIVITY FEED ===== */
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--panel-border);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.activity-text { font-size: 0.82rem; color: var(--charcoal); line-height: 1.4; }
+.activity-time { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+/* ===== CHART CONTAINER ===== */
+.chart-container { height: 200px; position: relative; }
+
+/* ===== AI INSIGHT ===== */
+.ai-insight-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--sage);
+  font-style: italic;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(124,154,126,0.06), rgba(196,151,90,0.04));
+  border-left: 3px solid var(--gold-light);
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 14px;
+}
+.ai-sparkle { color: var(--gold); margin-right: 4px; }
+
+/* ===== STUDENT TABLE ===== */
+.student-search {
+  width: 100%;
+  background: var(--cream);
+  border: 1px solid var(--panel-border);
+  border-radius: 30px;
+  padding: 9px 16px;
+  font-size: 0.82rem;
+  color: var(--charcoal);
+  outline: none;
+  margin-bottom: 14px;
+  font-family: 'DM Sans', sans-serif;
+  transition: var(--transition);
+}
+.student-search:focus { border-color: var(--sage-light); }
+.progress-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.progress-table th {
+  text-align: left;
+  padding: 8px 10px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--panel-border);
+  font-weight: 500;
+}
+.progress-table td { padding: 10px 10px; border-bottom: 1px solid rgba(124,154,126,0.06); vertical-align: middle; }
+.progress-table tr:last-child td { border-bottom: none; }
+.progress-table tr:hover td { background: rgba(124,154,126,0.04); }
+.mini-bar {
+  width: 80px;
+  height: 5px;
+  background: var(--panel-border);
+  border-radius: 4px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.mini-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--sage), var(--sage-lighter)); }
+.tier-tag {
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.tier-tag.essential { background: rgba(124,154,126,0.15); color: var(--sage); }
+.tier-tag.complete { background: rgba(196,151,90,0.15); color: #a07a3a; }
+.tier-tag.premium { background: rgba(212,165,160,0.2); color: #9a5a55; }
+
+/* ===== QUICK ACTIONS ===== */
+.quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.quick-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  background: var(--cream);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--charcoal);
+  font-size: 0.82rem;
+  text-align: left;
+}
+.quick-btn:hover { background: var(--sage); color: white; border-color: var(--sage); transform: translateY(-1px); }
+.quick-btn:hover .quick-icon { transform: scale(1.1); }
+.quick-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+/* ===== NOTIFICATIONS PANEL ===== */
+.notif-panel {
+  display: none;
+  position: fixed;
+  top: calc(var(--topbar-h) + 8px);
+  right: 24px;
+  width: 320px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  z-index: 200;
+  overflow: hidden;
+}
+.notif-panel.open { display: block; animation: slideDown 0.2s ease; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.notif-header { padding: 14px 18px; border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between; align-items: center; }
+.notif-header span { font-size: 0.85rem; font-weight: 500; }
+.notif-clear { font-size: 0.72rem; color: var(--sage-light); cursor: pointer; }
+.notif-item { padding: 12px 18px; border-bottom: 1px solid var(--panel-border); display: flex; gap: 10px; align-items: flex-start; }
+.notif-item:last-child { border-bottom: none; }
+.notif-icon { font-size: 1.1rem; flex-shrink: 0; }
+.notif-body { font-size: 0.78rem; color: var(--charcoal); line-height: 1.4; }
+.notif-body .nt { font-weight: 600; }
+.notif-time { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13,40,24,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--warm-white);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 460px;
+  width: 90%;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+  position: relative;
+  animation: modalIn 0.25s ease;
+}
+@keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.modal-close {
+  position: absolute;
+  top: 16px; right: 18px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--muted);
+  transition: var(--transition);
+}
+.modal-close:hover { color: var(--charcoal); }
+.modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; color: var(--sage); margin-bottom: 18px; font-weight: 600; }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 5px; letter-spacing: 0.5px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--cream);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--charcoal);
+  outline: none;
+  transition: var(--transition);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--sage-light); }
+.form-textarea { resize: vertical; min-height: 80px; }
+.form-submit {
+  width: 100%;
+  background: linear-gradient(135deg, var(--sage), var(--sage-light));
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: var(--transition);
+  margin-top: 6px;
+}
+.form-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(74,107,76,0.3); }
+
+/* ===== CALENDAR STRIP ===== */
+.calendar-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.cal-day {
+  flex-shrink: 0;
+  width: 52px;
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid var(--panel-border);
+  transition: var(--transition);
+}
+.cal-day:hover, .cal-day.today { background: var(--sage); color: white; border-color: var(--sage); }
+.cal-day.has-event { border-color: var(--gold); }
+.cal-day .dow { font-size: 0.65rem; color: inherit; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+.cal-day .dom { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; }
+
+/* ===== ROOMS STATUS ===== */
+.room-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--panel-border);
+}
+.room-item:last-child { border-bottom: none; }
+.room-emoji { font-size: 1.1rem; flex-shrink: 0; }
+.room-info { flex: 1; }
+.room-name { font-size: 0.85rem; font-weight: 500; }
+.room-status { font-size: 0.7rem; color: var(--muted); }
+.status-badge {
+  font-size: 0.65rem;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.status-badge.live { background: rgba(90,154,92,0.15); color: #3a7a3c; }
+.status-badge.building { background: rgba(196,151,90,0.15); color: #8a6830; }
+.status-badge.planned { background: rgba(138,133,120,0.12); color: var(--muted); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .search-input { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-main">Sacred Cycles</div>
+    <div class="logo-sub">Business Platform</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Core</div>
+    <a class="nav-item active" onclick="showSection('dashboard')">
+      <span class="icon">✦</span> Dashboard
+    </a>
+    <a class="nav-item" onclick="showSection('students')">
+      <span class="icon">🌿</span> Students
+      <span class="badge" id="studentsBadge">247</span>
+    </a>
+    <a class="nav-item" onclick="showSection('analytics')">
+      <span class="icon">📊</span> Analytics
+    </a>
+    <a class="nav-item" onclick="showSection('revenue')">
+      <span class="icon">💛</span> Revenue
+    </a>
+
+    <div class="nav-section-label">Rooms</div>
+    <a class="nav-item" onclick="showSection('rooms')">
+      <span class="icon">🏛️</span> All Rooms
+    </a>
+    <a class="nav-item" href="index.html" target="_blank">
+      <span class="icon">🌐</span> Public Site ↗
+    </a>
+
+    <div class="nav-section-label">Content</div>
+    <a class="nav-item" onclick="openModal('post')">
+      <span class="icon">✍️</span> New Post
+    </a>
+    <a class="nav-item" onclick="showSection('schedule')">
+      <span class="icon">📅</span> Schedule
+    </a>
+    <a class="nav-item" onclick="showSection('resources')">
+      <span class="icon">📚</span> Resources
+    </a>
+
+    <div class="nav-section-label">Settings</div>
+    <a class="nav-item" onclick="openModal('settings')">
+      <span class="icon">⚙️</span> Settings
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-avatar">
+      <div class="avatar-circle">T</div>
+      <div class="avatar-info">
+        <div class="name">T. Lott, RN</div>
+        <div class="role">Admin • Premium</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title">Good morning, <span>Ting</span> ✦</div>
+    <div class="topbar-right">
+      <input type="text" class="search-input" id="globalSearch" placeholder="Search students, resources..." oninput="handleSearch(this.value)">
+      <button class="icon-btn" onclick="toggleNotif()" title="Notifications">
+        🛎️ <span class="notif-dot"></span>
+      </button>
+      <button class="icon-btn" onclick="toggleDark()" id="darkBtn" title="Toggle dark mode">☽</button>
+      <span class="topbar-badge">Premium Active</span>
+      <span class="date-chip" id="datechip"></span>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION PANEL -->
+  <div class="notif-panel" id="notifPanel">
+    <div class="notif-header">
+      <span>Notifications</span>
+      <span class="notif-clear" onclick="clearNotifs()">Clear all</span>
+    </div>
+    <div id="notifList"></div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="mainContent">
+
+    <!-- STATS ROW -->
+    <div class="stat-row" id="statsRow"></div>
+
+    <!-- ROW 1 -->
+    <div class="grid-3">
+
+      <!-- Tier Performance -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Tier Performance</div>
+            <div class="panel-sub">Enrollment distribution</div>
+          </div>
+          <button class="panel-action" onclick="openModal('enroll')">+ Enroll</button>
+        </div>
+        <div id="tierList"></div>
+      </div>
+
+      <!-- Still Waters -->
+      <div class="still-waters">
+        <div class="sw-label">✦ Still Waters</div>
+        <div class="sw-quote" id="swQuote"></div>
+        <div class="sw-source" id="swSource"></div>
+        <button class="sw-refresh" onclick="refreshQuote()">↻ Refresh</button>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Recent Activity</div>
+            <div class="panel-sub">Live feed</div>
+          </div>
+        </div>
+        <div id="activityFeed"></div>
+      </div>
+    </div>
+
+    <!-- CHART ROW -->
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Revenue & Enrollments</div>
+            <div class="panel-sub">Last 6 months • trend view</div>
+          </div>
+          <select id="chartRange" class="panel-action" style="cursor:pointer;" onchange="updateChart()">
+            <option value="6">6 months</option>
+            <option value="12">12 months</option>
+            <option value="3">3 months</option>
+          </select>
+        </div>
+        <div class="chart-container">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Rooms Status -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Sacred Rooms</div>
+            <div class="panel-sub">Build status</div>
+          </div>
+        </div>
+        <div id="roomsList"></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM ROW -->
+    <div class="grid-2">
+
+      <!-- AI Insight -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title"><span class="ai-sparkle">✦</span> Sacred AI Insight</div>
+            <div class="panel-sub">Personalized business intelligence</div>
+          </div>
+        </div>
+        <div class="ai-insight-text" id="aiInsightText"></div>
+        <button class="panel-action" onclick="generateInsight()" style="margin-top:4px;">↻ Generate new insight</button>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Quick Actions</div>
+            <div class="panel-sub">Common tasks</div>
+          </div>
+        </div>
+        <div class="quick-actions">
+          <button class="quick-btn" onclick="openModal('enroll')"><span class="quick-icon">🌿</span> New Enrollment</button>
+          <button class="quick-btn" onclick="openModal('post')"><span class="quick-icon">✍️</span> Create Post</button>
+          <button class="quick-btn" onclick="openModal('session')"><span class="quick-icon">📅</span> Book Session</button>
+          <button class="quick-btn" onclick="openModal('resource')"><span class="quick-icon">📚</span> Add Resource</button>
+          <button class="quick-btn" onclick="openModal('email')"><span class="quick-icon">📧</span> Email Students</button>
+          <button class="quick-btn" onclick="openModal('coupon')"><span class="quick-icon">🎁</span> Create Coupon</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENT PROGRESS TABLE (Full Width) -->
+    <div class="panel grid-full">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Student Progress Tracker</div>
+          <div class="panel-sub">All active students</div>
+        </div>
+        <button class="panel-action" onclick="exportCSV()">↓ Export CSV</button>
+      </div>
+      <input type="text" class="student-search" id="studentSearch" placeholder="🔍 Filter by name, tier, or week..." oninput="filterStudents(this.value)">
+      <table class="progress-table" id="progressTable">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Tier</th>
+            <th>Week</th>
+            <th>Progress</th>
+            <th>Last Active</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="progressBody"></tbody>
+      </table>
+    </div>
+
+    <!-- CALENDAR STRIP -->
+    <div class="panel grid-full">
+      <div class="panel-header">
+        <div class="panel-title">Upcoming Sessions</div>
+      </div>
+      <div class="calendar-strip" id="calendarStrip"></div>
+      <div style="margin-top:14px; font-size:0.82rem; color:var(--muted);" id="calendarEvents">
+        Click a date to view scheduled sessions.
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalIfOutside(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle">Action</div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+// ============================================================
+// DATA STORE (localStorage persistence)
+// ============================================================
+const defaultData = {
+  enrollments: 247,
+  revenue: 14200,
+  activeStudents: 189,
+  sessionsToday: 3,
+  tiers: [
+    { name: 'Essential Renewal', price: 197, sales: 138, color: '#7C9A7E' },
+    { name: 'Complete Healing Kit', price: 397, sales: 74, color: '#C4975A' },
+    { name: 'Premium Transformation', price: 997, sales: 35, color: '#D4A5A0' }
+  ],
+  activity: [
+    { icon: '🌿', text: 'Simone R. enrolled in Premium Transformation', time: '12 min ago', color: '#D4A5A0' },
+    { icon: '💛', text: 'New payment: Complete Healing Kit — $397', time: '38 min ago', color: '#C4975A' },
+    { icon: '📅', text: 'Coaching session completed: Kezia M.', time: '1 hr ago', color: '#7C9A7E' },
+    { icon: '⭐', text: 'New 5-star review from Marcus T.', time: '2 hrs ago', color: '#C4975A' },
+    { icon: '🌿', text: 'Aisha J. enrolled in Essential Renewal', time: '3 hrs ago', color: '#7C9A7E' }
+  ],
+  students: [
+    { name: 'Simone R.', tier: 'premium', week: 5, progress: 62, lastActive: 'Today', status: 'On Track' },
+    { name: 'Kezia M.', tier: 'complete', week: 3, progress: 38, lastActive: 'Yesterday', status: 'On Track' },
+    { name: 'Marcus T.', tier: 'essential', week: 7, progress: 88, lastActive: 'Today', status: 'Thriving' },
+    { name: 'Aisha J.', tier: 'essential', week: 1, progress: 12, lastActive: '2 days ago', status: 'Starting' },
+    { name: 'Dana L.', tier: 'premium', week: 6, progress: 75, lastActive: 'Today', status: 'Thriving' },
+    { name: 'Reina V.', tier: 'complete', week: 4, progress: 50, lastActive: '3 days ago', status: 'Needs Check-in' },
+    { name: 'Tyler B.', tier: 'essential', week: 2, progress: 25, lastActive: 'Yesterday', status: 'On Track' },
+    { name: 'Naomi C.', tier: 'premium', week: 8, progress: 96, lastActive: 'Today', status: 'Completing' },
+    { name: 'Jada F.', tier: 'complete', week: 5, progress: 63, lastActive: '1 day ago', status: 'On Track' },
+    { name: 'Carmen S.', tier: 'essential', week: 3, progress: 37, lastActive: '4 days ago', status: 'Needs Check-in' }
+  ],
+  notifications: [
+    { icon: '🌿', title: 'New enrollment', body: 'Simone R. joined Premium Transformation', time: '12 min ago' },
+    { icon: '💛', title: 'Payment received', body: '$397 from Kezia M.', time: '38 min ago' },
+    { icon: '⭐', title: 'New review', body: '"This program changed my life." — Marcus T.', time: '2 hrs ago' }
+  ],
+  rooms: [
+    { emoji: '🌿', name: 'Sacred Cycles Program', desc: 'Flagship 8-week wellness', status: 'live' },
+    { emoji: '🎨', name: 'ColorSoul', desc: 'AI art therapy', status: 'building' },
+    { emoji: '🔗', name: 'GrantBridge', desc: 'Grant finder', status: 'building' },
+    { emoji: '🎤', name: 'ComedyEngine', desc: 'AI laughter therapy', status: 'building' },
+    { emoji: '🧘', name: 'Yoga Nidra', desc: 'Nervous system restoration', status: 'building' },
+    { emoji: '🌴', name: 'Wellness Travel', desc: 'Therapeutic getaways', status: 'building' },
+    { emoji: '📚', name: 'Book Store', desc: 'Books & audiobooks', status: 'planned' },
+    { emoji: '🎵', name: 'Music & Artistry', desc: 'Healing music', status: 'planned' },
+    { emoji: '🏥', name: "Nurse's Corner", desc: 'Clinical articles (RN)', status: 'planned' },
+    { emoji: '📰', name: 'Blog', desc: 'SEO & authority content', status: 'planned' }
+  ],
+  monthlyRevenue: [4200, 6800, 8900, 10400, 12700, 14200],
+  monthlyEnrollments: [62, 98, 134, 171, 208, 247]
+};
+
+let appData = JSON.parse(localStorage.getItem('sacredDash')) || defaultData;
+function saveData() { localStorage.setItem('sacredDash', JSON.stringify(appData)); }
+
+// ============================================================
+// QUOTES
+// ============================================================
+const quotes = [
+  { text: "The very cells of your body hold the memory of every healing moment you've ever experienced. You are already on the path.", source: "T. Lott, RN — Sacred Cycles" },
+  { text: "Wellness is not the absence of storm. It is learning to dance in the rain with grace and rhythm.", source: "Sacred Cycles Renewal" },
+  { text: "Your nervous system is not broken. It is brilliantly protecting you. Now, let us teach it that it is safe.", source: "T. Lott, RN" },
+  { text: "Crystal, breath, and intention — the trinity of transformation that ancient healers knew and science is now rediscovering.", source: "Sacred Cycles Program Guide" },
+  { text: "The most sacred thing you can do today is rest in your own wholeness.", source: "Still Waters Meditation, Week 4" },
+  { text: "Sound is the language your nervous system spoke before words existed. Let it heal you.", source: "Sacred Cycles Sound Therapy Module" }
+];
+let quoteIdx = 0;
+function refreshQuote() {
+  quoteIdx = (quoteIdx + 1) % quotes.length;
+  document.getElementById('swQuote').textContent = '"' + quotes[quoteIdx].text + '"';
+  document.getElementById('swSource').textContent = '— ' + quotes[quoteIdx].source;
+}
+
+// ============================================================
+// AI INSIGHTS
+// ============================================================
+const insights = [
+  'Based on current enrollment velocity, launching a "New Moon Reset" bundle next week could boost premium conversions by an estimated 34% — your audience responds strongly to cyclical timing.',
+  'Reina V. and Carmen S. have not logged in for 3+ days. A personal check-in message this week could recover both students and generate two 5-star reviews.',
+  'Your Complete Healing Kit tier is underperforming relative to its price anchor. Consider adding a "30-day crystal starter ritual" PDF to increase perceived value.',
+  '73% of your active students are female, ages 28–45. Pinterest and Instagram Reels targeting this demographic will yield the highest new enrollment ROI right now.',
+  'Naomi C. is completing Week 8 — she is a prime candidate for a Premium upsell or alumni ambassador program. Reach out this week.',
+  'Revenue growth is tracking 23% month-over-month. At current pace, you will cross $20,000 MRR by July 2026. Consider adding a Group Coaching tier at $1,497.'
+];
+let insightIdx = 0;
+function generateInsight() {
+  insightIdx = (insightIdx + 1) % insights.length;
+  document.getElementById('aiInsightText').textContent = insights[insightIdx];
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+function renderStats() {
+  const total = appData.tiers.reduce((s, t) => s + t.sales, 0);
+  const rev = appData.tiers.reduce((s, t) => s + t.sales * t.price, 0);
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card green">
+      <div class="stat-icon">🌿</div>
+      <div class="stat-label">Total Enrollments</div>
+      <div class="stat-value">${total}</div>
+      <div class="stat-change up">↑ 18% this month</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-icon">💛</div>
+      <div class="stat-label">Revenue (MTD)</div>
+      <div class="stat-value gold">$${(rev/1000).toFixed(1)}k</div>
+      <div class="stat-change up">↑ 23% vs last month</div>
+    </div>
+    <div class="stat-card blush">
+      <div class="stat-icon">🌸</div>
+      <div class="stat-label">Active Students</div>
+      <div class="stat-value">${appData.activeStudents}</div>
+      <div class="stat-change up">↑ 11 this week</div>
+    </div>
+    <div class="stat-card deep">
+      <div class="stat-icon">📅</div>
+      <div class="stat-label">Sessions Today</div>
+      <div class="stat-value">${appData.sessionsToday}</div>
+      <div class="stat-change">Next: 2:00 PM EST</div>
+    </div>
+  `;
+}
+
+function renderTiers() {
+  const total = appData.tiers.reduce((s, t) => s + t.sales, 0);
+  document.getElementById('tierList').innerHTML = appData.tiers.map(t => {
+    const pct = Math.round((t.sales / total) * 100);
+    return `
+      <div class="tier-item">
+        <div class="tier-dot" style="background:${t.color}"></div>
+        <div class="tier-info">
+          <div class="tier-name">${t.name}</div>
+          <div class="tier-count">${t.sales} enrolled · $${t.price}</div>
+        </div>
+        <div class="tier-bar-wrap">
+          <div class="tier-bar"><div class="tier-bar-fill" style="width:${pct}%;background:${t.color}"></div></div>
+          <div class="tier-pct">${pct}%</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderActivity() {
+  document.getElementById('activityFeed').innerHTML = appData.activity.map(a => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.color}"></div>
+      <div>
+        <div class="activity-text">${a.text}</div>
+        <div class="activity-time">${a.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderRooms() {
+  document.getElementById('roomsList').innerHTML = appData.rooms.map(r => `
+    <div class="room-item">
+      <div class="room-emoji">${r.emoji}</div>
+      <div class="room-info">
+        <div class="room-name">${r.name}</div>
+        <div class="room-status">${r.desc}</div>
+      </div>
+      <span class="status-badge ${r.status}">${r.status === 'live' ? '● Live' : r.status === 'building' ? '⚙ Building' : '◌ Planned'}</span>
+    </div>
+  `).join('');
+}
+
+function renderStudents(filter) {
+  let students = appData.students;
+  if (filter) {
+    const q = filter.toLowerCase();
+    students = students.filter(s =>
+      s.name.toLowerCase().includes(q) ||
+      s.tier.includes(q) ||
+      s.status.toLowerCase().includes(q) ||
+      String(s.week).includes(q)
+    );
+  }
+  document.getElementById('progressBody').innerHTML = students.map(s => `
+    <tr>
+      <td style="font-weight:500">${s.name}</td>
+      <td><span class="tier-tag ${s.tier}">${s.tier === 'essential' ? 'Essential' : s.tier === 'complete' ? 'Complete' : 'Premium'}</span></td>
+      <td>Week ${s.week}</td>
+      <td>
+        <div class="mini-bar"><div class="mini-bar-fill" style="width:${s.progress}%"></div></div>
+        ${s.progress}%
+      </td>
+      <td style="color:var(--muted)">${s.lastActive}</td>
+      <td style="font-size:0.78rem;color:${s.status==='Thriving'?'#3a7a3c':s.status==='Needs Check-in'?'#9a5050':'var(--muted)'}">${s.status}</td>
+    </tr>
+  `).join('');
+}
+
+function filterStudents(val) { renderStudents(val); }
+
+function renderNotifications() {
+  document.getElementById('notifList').innerHTML = appData.notifications.map(n => `
+    <div class="notif-item">
+      <div class="notif-icon">${n.icon}</div>
+      <div class="notif-body">
+        <div class="nt">${n.title}</div>
+        <div>${n.body}</div>
+        <div class="notif-time">${n.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCalendar() {
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const today = new Date();
+  let html = '';
+  for (let i = -2; i <= 9; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    const isToday = i === 0;
+    const hasEvent = [0, 2, 5, 8].includes(i);
+    html += `
+      <div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}" onclick="showCalDay(${i})">
+        <div class="dow">${days[d.getDay()]}</div>
+        <div class="dom">${d.getDate()}</div>
+      </div>
+    `;
+  }
+  document.getElementById('calendarStrip').innerHTML = html;
+}
+
+const calEvents = {
+  0: ['2:00 PM — Group Breathwork Session (12 students)', '4:30 PM — 1:1 Coaching: Naomi C.'],
+  2: ['10:00 AM — Sound Therapy Masterclass (live)'],
+  5: ['3:00 PM — New Moon Reset Ceremony', '5:00 PM — Premium Q&A Call'],
+  8: ['11:00 AM — Weekly Check-in: Reina V.']
+};
+function showCalDay(offset) {
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  const label = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  const events = calEvents[offset];
+  const evtHtml = events
+    ? events.map(e => `<div style="padding:6px 0;border-bottom:1px solid var(--panel-border);font-size:0.82rem">📅 ${e}</div>`).join('')
+    : '<div style="font-size:0.82rem;color:var(--muted)">No sessions scheduled for this day.</div>';
+  document.getElementById('calendarEvents').innerHTML = `<strong style="font-size:0.82rem;color:var(--sage)">${label}</strong><div style="margin-top:8px">${evtHtml}</div>`;
+}
+
+// ============================================================
+// CHART
+// ============================================================
+let trendChart;
+const monthLabels6 = ['Nov','Dec','Jan','Feb','Mar','Apr'];
+const monthLabels12 = ['May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
+const monthLabels3 = ['Feb','Mar','Apr'];
+
+function initChart() {
+  const ctx = document.getElementById('trendChart').getContext('2d');
+  trendChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: monthLabels6,
+      datasets: [
+        {
+          label: 'Revenue ($)',
+          data: appData.monthlyRevenue,
+          borderColor: '#C4975A',
+          backgroundColor: 'rgba(196,151,90,0.08)',
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#C4975A',
+          pointRadius: 4
+        },
+        {
+          label: 'Enrollments',
+          data: appData.monthlyEnrollments,
+          borderColor: '#7C9A7E',
+          backgroundColor: 'rgba(124,154,126,0.07)',
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#7C9A7E',
+          pointRadius: 4,
+          yAxisID: 'y2'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { font: { family: 'DM Sans', size: 11 }, boxWidth: 10 } }
+      },
+      scales: {
+        y: { ticks: { font: { size: 10 }, callback: v => '$' + (v/1000).toFixed(1) + 'k' } },
+        y2: { position: 'right', ticks: { font: { size: 10 } }, grid: { drawOnChartArea: false } }
+      }
+    }
+  });
+}
+
+function updateChart() {
+  const range = parseInt(document.getElementById('chartRange').value);
+  const labels = range === 12 ? monthLabels12 : range === 3 ? monthLabels3 : monthLabels6;
+  const revFull = [3100,3800,4200,5500,6800,7900,8900,9600,10400,12700,13100,14200];
+  const enFull  = [22,35,62,88,98,112,134,155,171,208,221,247];
+  const rev = revFull.slice(-range);
+  const en  = enFull.slice(-range);
+  trendChart.data.labels = labels;
+  trendChart.data.datasets[0].data = rev;
+  trendChart.data.datasets[1].data = en;
+  trendChart.update();
+}
+
+// ============================================================
+// MODALS
+// ============================================================
+const modalTemplates = {
+  enroll: {
+    title: '🌿 New Enrollment',
+    html: `
+      <div class="form-group"><label class="form-label">Student Name</label><input class="form-input" placeholder="Full name"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="student@email.com"></div>
+      <div class="form-group"><label class="form-label">Tier</label>
+        <select class="form-select">
+          <option>Essential Renewal — $197</option>
+          <option>Complete Healing Kit — $397</option>
+          <option>Premium Transformation — $997</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Notes (optional)</label><textarea class="form-textarea" placeholder="Intake notes..."></textarea></div>
+      <button class="form-submit" onclick="submitEnroll()">✦ Enroll Student</button>
+    `
+  },
+  post: {
+    title: '✍️ Create Content Post',
+    html: `
+      <div class="form-group"><label class="form-label">Platform</label>
+        <select class="form-select"><option>Instagram</option><option>LinkedIn</option><option>YouTube</option><option>Pinterest</option><option>All Platforms</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Caption</label><textarea class="form-textarea" placeholder="Write your post caption..."></textarea></div>
+      <div class="form-group"><label class="form-label">Schedule Date/Time</label><input class="form-input" type="datetime-local"></div>
+      <button class="form-submit" onclick="submitPost()">📤 Schedule Post</button>
+    `
+  },
+  session: {
+    title: '📅 Book Coaching Session',
+    html: `
+      <div class="form-group"><label class="form-label">Student</label>
+        <select class="form-select">${defaultData.students.map(s => `<option>${s.name}</option>`).join('')}</select>
+      </div>
+      <div class="form-group"><label class="form-label">Session Type</label>
+        <select class="form-select"><option>1:1 Coaching (60 min)</option><option>Group Session</option><option>Intake Assessment</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Date & Time</label><input class="form-input" type="datetime-local"></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" placeholder="Session goals..."></textarea></div>
+      <button class="form-submit" onclick="submitSession()">✦ Book Session</button>
+    `
+  },
+  resource: {
+    title: '📚 Add Resource',
+    html: `
+      <div class="form-group"><label class="form-label">Resource Title</label><input class="form-input" placeholder="e.g. Week 4 Crystal Activation Guide"></div>
+      <div class="form-group"><label class="form-label">Type</label>
+        <select class="form-select"><option>PDF / Workbook</option><option>Audio Healing</option><option>Video Masterclass</option><option>Meditation</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Available To</label>
+        <select class="form-select"><option>All Tiers</option><option>Complete & Premium</option><option>Premium Only</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Drive Link</label><input class="form-input" placeholder="https://drive.google.com/..."></div>
+      <button class="form-submit" onclick="submitResource()">📎 Add Resource</button>
+    `
+  },
+  email: {
+    title: '📧 Email Students',
+    html: `
+      <div class="form-group"><label class="form-label">Recipients</label>
+        <select class="form-select"><option>All Students (247)</option><option>Premium Only (35)</option><option>Complete (74)</option><option>Essential (138)</option><option>Needs Check-in</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Subject Line</label><input class="form-input" placeholder="Your Sacred Cycles update..."></div>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" style="min-height:120px" placeholder="Write your message..."></textarea></div>
+      <button class="form-submit" onclick="submitEmail()">✉️ Send Email</button>
+    `
+  },
+  coupon: {
+    title: '🎁 Create Coupon',
+    html: `
+      <div class="form-group"><label class="form-label">Coupon Code</label><input class="form-input" placeholder="e.g. SACRED20" style="text-transform:uppercase"></div>
+      <div class="form-group"><label class="form-label">Discount</label>
+        <select class="form-select"><option>20% off</option><option>30% off</option><option>$50 off</option><option>$100 off</option><option>Free shipping only</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Applies To</label>
+        <select class="form-select"><option>All tiers</option><option>Essential only</option><option>Complete only</option><option>Premium only</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Expires</label><input class="form-input" type="date"></div>
+      <button class="form-submit" onclick="submitCoupon()">✦ Create Coupon</button>
+    `
+  },
+  settings: {
+    title: '⚙️ Settings',
+    html: `
+      <div class="form-group"><label class="form-label">Display Name</label><input class="form-input" value="T. Lott, RN"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="tinglott@gmail.com" type="email"></div>
+      <div class="form-group"><label class="form-label">Time Zone</label>
+        <select class="form-select"><option>America/New_York (ET)</option><option>America/Chicago</option><option>America/Los_Angeles</option></select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:12px">
+        <input type="checkbox" id="emailNotif" checked>
+        <label for="emailNotif" class="form-label" style="margin:0">Email notifications for new enrollments</label>
+      </div>
+      <button class="form-submit" onclick="submitSettings()">✦ Save Settings</button>
+    `
+  }
+};
+
+function openModal(type) {
+  const t = modalTemplates[type];
+  if (!t) return;
+  document.getElementById('modalTitle').textContent = t.title;
+  document.getElementById('modalContent').innerHTML = t.html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function closeModalIfOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+function showToast(msg, color = 'var(--sage)') {
+  closeModal();
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = `position:fixed;bottom:28px;right:28px;background:${color};color:white;padding:12px 22px;border-radius:12px;font-size:0.85rem;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,0.15);animation:slideDown 0.25s ease`;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+function submitEnroll() {
+  appData.enrollments++;
+  appData.activeStudents++;
+  appData.tiers[0].sales++;
+  appData.activity.unshift({ icon:'🌿', text:'New student enrolled in Essential Renewal', time:'Just now', color:'#7C9A7E' });
+  if (appData.activity.length > 8) appData.activity.pop();
+  saveData();
+  renderStats(); renderActivity();
+  showToast('✦ Student enrolled successfully!');
+}
+function submitPost() { showToast('📤 Post scheduled successfully!', 'var(--gold)'); }
+function submitSession() { showToast('📅 Session booked!', 'var(--sage)'); }
+function submitResource() { showToast('📚 Resource added!', 'var(--sage)'); }
+function submitEmail() { showToast('✉️ Email sent to students!', 'var(--sage)'); }
+function submitCoupon() { showToast('🎁 Coupon created!', 'var(--gold)'); }
+function submitSettings() { showToast('✦ Settings saved!', 'var(--sage)'); }
+
+// ============================================================
+// NOTIFICATIONS
+// ============================================================
+function toggleNotif() {
+  document.getElementById('notifPanel').classList.toggle('open');
+}
+function clearNotifs() {
+  appData.notifications = [];
+  renderNotifications();
+  document.querySelector('.notif-dot').style.display = 'none';
+}
+
+// ============================================================
+// DARK MODE
+// ============================================================
+function toggleDark() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
+  document.getElementById('darkBtn').textContent = isDark ? '☽' : '☀️';
+  localStorage.setItem('sacredTheme', isDark ? '' : 'dark');
+}
+
+// ============================================================
+// SEARCH (simple highlight / filter)
+// ============================================================
+function handleSearch(val) {
+  if (val.length > 1) {
+    document.getElementById('studentSearch').value = val;
+    filterStudents(val);
+    document.getElementById('progressTable').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ============================================================
+// CSV EXPORT
+// ============================================================
+function exportCSV() {
+  const rows = [['Name','Tier','Week','Progress','Last Active','Status']];
+  appData.students.forEach(s => rows.push([s.name, s.tier, s.week, s.progress+'%', s.lastActive, s.status]));
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'sacred-cycles-students.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ============================================================
+// DATE
+// ============================================================
+function setDate() {
+  const d = new Date();
+  document.getElementById('datechip').textContent = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+// ============================================================
+// SECTION NAVIGATION (stub — can expand later)
+// ============================================================
+function showSection(name) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  // For now, all sections show dashboard — can add routing later
+  if (name !== 'dashboard') showToast(`📍 ${name.charAt(0).toUpperCase()+name.slice(1)} section — coming soon!`, 'var(--muted)');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('load', () => {
+  // Restore theme
+  const savedTheme = localStorage.getItem('sacredTheme');
+  if (savedTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('darkBtn').textContent = '☀️';
+  }
+
+  setDate();
+  renderStats();
+  renderTiers();
+  renderActivity();
+  refreshQuote();
+  generateInsight();
+  renderRooms();
+  renderStudents();
+  renderNotifications();
+  renderCalendar();
+  initChart();
+
+  // Close notif panel when clicking outside
+  document.addEventListener('click', e => {
+    const panel = document.getElementById('notifPanel');
+    if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.closest('.icon-btn')) {
+      panel.classList.remove('open');
+    }
+  });
+
+  console.log('%c✦ Sacred Cycles Business Platform — initialized', 'color:#C4975A;font-size:14px;font-weight:bold');
+});
+</script>
+</body>
+</html>
