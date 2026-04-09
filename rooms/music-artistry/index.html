@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music & Artistry: Healing Sound & Sacred Art | Sacred Cycles Renewal</title>
+  <meta name="description" content="Healing music, sacred frequencies, and spiritual art from T. Lott, RN. Binaural beats, solfeggio frequencies, gospel music, and NebulaPixels digital art — all designed to heal the soul." />
+  <meta name="keywords" content="healing music, binaural beats, solfeggio frequencies, 432Hz, sound healing, sacred music, spiritual art, digital art, NebulaPixels, sound therapy, meditation music" />
+  <meta name="author" content="T. Lott, RN" />
+  <meta property="og:title" content="Music & Artistry: Sound That Heals the Soul | Sacred Cycles Renewal" />
+  <meta property="og:description" content="Healing frequencies, sacred sound collections, and cosmic digital art — curated for your renewal journey." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sacred-cycles-renewal.vercel.app/rooms/music-artistry/" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@mux/mux-player"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lato', sans-serif; background: #faf7f0; color: #2c2c2c; line-height: 1.7; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    #reading-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, #c9a84c, #e8d48b, #c9a84c);
+      z-index: 10001; transition: width 0.1s linear;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; color: #1a3c2a; line-height: 1.25; }
+    h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
+    h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 600; }
+    h3 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 600; }
+    h4 { font-size: 1.05rem; font-weight: 600; }
+
+    .section-subtitle { font-family: 'Playfair Display', serif; color: #c9a84c; font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .section-divider { width: 60px; height: 2px; background: #c9a84c; margin: 1rem auto 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .text-center { text-align: center; }
+    .section-padding { padding: 100px 0; }
+
+    .btn { display: inline-block; padding: 13px 32px; border-radius: 50px; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 0.88rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.35s ease; border: 2px solid transparent; }
+    .btn-primary { background: linear-gradient(135deg, #c9a84c, #e0c571); color: #0d2818; box-shadow: 0 4px 20px rgba(201,168,76,0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.45); }
+    .btn-secondary { background: transparent; border-color: #c9a84c; color: #c9a84c; }
+    .btn-secondary:hover { background: #c9a84c; color: #0d2818; transform: translateY(-2px); }
+
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; padding: 16px 0; background: rgba(13,40,24,0.92); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(201,168,76,0.15); transition: padding 0.3s; }
+    .navbar.scrolled { padding: 10px 0; box-shadow: 0 4px 30px rgba(0,0,0,0.2); }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: #c9a84c; }
+    .nav-brand span { color: #faf7f0; font-weight: 400; }
+    .nav-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .nav-links a { color: #faf7f0; font-size: 0.82rem; transition: color 0.3s; }
+    .nav-links a:hover { color: #c9a84c; }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+
+    /* HERO with pulse rings */
+    .hero {
+      min-height: 80vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(155deg, #050f08 0%, #0d2818 40%, #1a3c2a 80%, #0d2818 100%);
+      padding: 150px 24px 90px; text-align: center; position: relative; overflow: hidden;
+    }
+    /* Animated pulse rings */
+    .pulse-ring {
+      position: absolute; border-radius: 50%; border: 1px solid rgba(201,168,76,0.15);
+      animation: pulseRing 4s ease-out infinite;
+    }
+    .pulse-ring:nth-child(1) { width: 300px; height: 300px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 0s; }
+    .pulse-ring:nth-child(2) { width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 1s; }
+    .pulse-ring:nth-child(3) { width: 700px; height: 700px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 2s; }
+    .pulse-ring:nth-child(4) { width: 900px; height: 900px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 3s; }
+    @keyframes pulseRing {
+      0% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); }
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; }
+    .hero-badge { display: inline-block; padding: 7px 22px; border-radius: 50px; border: 1px solid rgba(201,168,76,0.4); background: rgba(201,168,76,0.1); color: #c9a84c; font-size: 0.78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .hero h1 { color: #faf7f0; margin-bottom: 1.2rem; }
+    .hero h1 em { font-style: normal; color: #c9a84c; }
+    .hero-subtitle { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: rgba(250,247,240,0.8); margin-bottom: 2rem; line-height: 1.8; max-width: 720px; margin-left: auto; margin-right: auto; }
+
+    /* MUSIC PRODUCTS */
+    .music-products { background: #faf7f0; }
+    .music-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 50px; }
+    @media (max-width: 700px) { .music-grid { grid-template-columns: 1fr; } }
+
+    .music-card {
+      background: #fff; border-radius: 20px; padding: 36px 30px;
+      border: 1px solid rgba(26,60,42,0.08);
+      box-shadow: 0 4px 22px rgba(26,60,42,0.06);
+      transition: all 0.35s;
+    }
+    .music-card:hover { transform: translateY(-8px); box-shadow: 0 16px 50px rgba(26,60,42,0.12); }
+    .music-icon { font-size: 2.8rem; margin-bottom: 14px; }
+    .music-card-tag { display: inline-block; padding: 4px 14px; border-radius: 50px; background: rgba(26,60,42,0.08); color: #1a3c2a; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .music-card h3 { color: #1a3c2a; margin-bottom: 8px; }
+    .music-card p { color: #555; font-size: 0.9rem; margin-bottom: 16px; line-height: 1.6; }
+    .music-price { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: #1a3c2a; margin-bottom: 18px; }
+
+    /* VIDEO SECTION */
+    .video-section { background: linear-gradient(160deg, #0d2818, #1a3c2a); }
+    .video-section h2 { color: #faf7f0; }
+    .video-wrap { margin-top: 44px; }
+
+    /* ART GALLERY */
+    .art-gallery { background: #faf7f0; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 50px; }
+    @media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .gallery-grid { grid-template-columns: 1fr; } }
+
+    .gallery-item {
+      position: relative; border-radius: 16px; overflow: hidden;
+      aspect-ratio: 1; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(26,60,42,0.1);
+      transition: all 0.35s;
+    }
+    .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 12px 40px rgba(26,60,42,0.2); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, rgba(13,40,24,0.85) 0%, transparent 60%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 20px; opacity: 0; transition: opacity 0.35s;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-title { color: #faf7f0; font-family: 'Cormorant Garamond', serif; font-size: 1rem; margin-bottom: 6px; }
+    .gallery-link { color: #c9a84c; font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* Art placeholder fallback */
+    .art-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+    }
+    .art-placeholder.c1 { background: linear-gradient(135deg, #0d2818, #1a3c2a, #c9a84c); }
+    .art-placeholder.c2 { background: linear-gradient(135deg, #1a1a3a, #3a1a5c, #c9a84c); }
+    .art-placeholder.c3 { background: linear-gradient(135deg, #0d2818, #234d35, #e8d48b); }
+    .art-placeholder.c4 { background: linear-gradient(135deg, #1a0d08, #3c1a1a, #c9a84c); }
+
+    /* SOUND SCIENCE */
+    .sound-science { background: #faf7f0; }
+    .science-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 50px; }
+    @media (max-width: 768px) { .science-grid { grid-template-columns: 1fr; } }
+    .science-card { background: #fff; border-radius: 18px; padding: 36px 28px; border: 1px solid rgba(26,60,42,0.08); box-shadow: 0 3px 16px rgba(26,60,42,0.04); transition: all 0.3s; }
+    .science-card:hover { transform: translateY(-5px); box-shadow: 0 10px 36px rgba(26,60,42,0.1); }
+    .science-freq { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 700; color: #c9a84c; margin-bottom: 10px; }
+    .science-card h4 { color: #1a3c2a; margin-bottom: 10px; }
+    .science-card p { color: #666; font-size: 0.88rem; line-height: 1.65; }
+
+    /* FULL CATALOG CTA */
+    .full-cta { background: linear-gradient(160deg, #0d2818, #1a3c2a); text-align: center; }
+    .full-cta h2 { color: #faf7f0; }
+
+    /* FOOTER */
+    .footer { background: #0a1f14; padding: 50px 0 28px; border-top: 1px solid rgba(201,168,76,0.1); }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 36px; }
+    @media (max-width: 768px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .footer-inner { grid-template-columns: 1fr; } }
+    .footer-brand h3 { font-family: 'Cormorant Garamond', serif; color: #c9a84c; font-size: 1.4rem; margin-bottom: 10px; }
+    .footer-brand p { color: rgba(250,247,240,0.5); font-size: 0.88rem; line-height: 1.7; }
+    .footer-col h4 { color: #faf7f0; font-family: 'Lato', sans-serif; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+    .footer-col a { display: block; color: rgba(250,247,240,0.5); font-size: 0.88rem; padding: 5px 0; transition: color 0.3s; }
+    .footer-col a:hover { color: #c9a84c; }
+    .footer-bottom { border-top: 1px solid rgba(250,247,240,0.06); padding-top: 20px; text-align: center; }
+    .footer-bottom p { color: rgba(250,247,240,0.35); font-size: 0.78rem; }
+
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    #back-to-top { position: fixed; bottom: 30px; right: 30px; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.3); background: rgba(13,40,24,0.9); color: #c9a84c; backdrop-filter: blur(12px); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 9990; }
+    #back-to-top.visible { opacity: 1; visibility: visible; }
+    #back-to-top:hover { background: #c9a84c; color: #0d2818; }
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="nav-brand"><a href="https://sacred-cycles-renewal.vercel.app">Sacred Cycles <span>| Renewal</span></a></div>
+      <div class="nav-links">
+        <a href="https://sacred-cycles-renewal.vercel.app/#rooms">All Rooms</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/bookstore/">📚 Book Store</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/nurses-corner/">🩺 Nurse's Corner</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/music-artistry/">🎵 Music & Artistry</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/blog/">📰 Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring"></div>
+    <div class="hero-content">
+      <div class="hero-badge">The Healing Arts</div>
+      <h1>Music &amp; Artistry: <em>Sound That Heals the Soul</em></h1>
+      <p class="hero-subtitle">From a registered nurse who has witnessed the limits of conventional treatment — sacred music and healing art are not luxuries. They are medicine. Explore a collection curated to restore, elevate, and transform.</p>
+      <a href="#music" class="btn btn-primary">Explore the Collection</a>
+    </div>
+  </section>
+
+  <!-- FEATURED HEALING MUSIC -->
+  <section class="section-padding music-products" id="music">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal">Therapeutic Sound</p>
+        <h2 class="reveal">Featured Healing Music</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:#666; max-width:620px; margin:0 auto;">
+          Professionally curated healing music collections — scientifically calibrated frequencies for rest, clarity, and spiritual expansion.
+        </p>
+      </div>
+
+      <div class="music-grid">
+        <div class="music-card reveal reveal-delay-1">
+          <div class="music-icon">🎵</div>
+          <div class="music-card-tag">10 Tracks</div>
+          <h3>Sacred Sounds Meditation Pack</h3>
+          <p>Ten hand-selected healing frequency tracks engineered to guide your mind into deep meditative states. Includes theta wave induction, 432Hz tuning, and Tibetan singing bowl recordings — ideal for daily practice.</p>
+          <div class="music-price">$12.99</div>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i class="fa fa-music" style="margin-right:8px;"></i>Buy Now
+          </a>
+        </div>
+
+        <div class="music-card reveal reveal-delay-2">
+          <div class="music-icon">🎵</div>
+          <div class="music-card-tag">Delta & Theta Waves</div>
+          <h3>Binaural Beats Sleep Collection</h3>
+          <p>Delta and theta wave binaural beats precisely engineered for deep, restorative sleep. As a psychiatric nurse who has treated hundreds of sleep disorders, I selected these frequencies for their clinical efficacy. 8 hours of guided sleep audio.</p>
+          <div class="music-price">$9.99</div>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i class="fa fa-music" style="margin-right:8px;"></i>Buy Now
+          </a>
+        </div>
+
+        <div class="music-card reveal reveal-delay-3">
+          <div class="music-icon">🎵</div>
+          <div class="music-card-tag">396Hz · 528Hz · 741Hz</div>
+          <h3>Solfeggio Frequency Bundle</h3>
+          <p>The complete sacred solfeggio scale — 396Hz for releasing fear, 528Hz for DNA repair and love, 741Hz for awakening intuition. Each frequency is presented in pure tone, with nature soundscape overlays for extended listening.</p>
+          <div class="music-price">$14.99</div>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i class="fa fa-music" style="margin-right:8px;"></i>Buy Now
+          </a>
+        </div>
+
+        <div class="music-card reveal reveal-delay-4">
+          <div class="music-icon">🎵</div>
+          <div class="music-card-tag">Uplifting & Spiritual</div>
+          <h3>Gospel &amp; Worship Playlist Pack</h3>
+          <p>A curated collection of uplifting gospel and contemporary worship music — selected for their emotional healing power, lyrical depth, and spiritual resonance. Perfect for your morning devotional, workout, or soul-stirring moments.</p>
+          <div class="music-price">$7.99</div>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i class="fa fa-music" style="margin-right:8px;"></i>Buy Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MUX VIDEO SECTION -->
+  <section class="section-padding video-section" id="video">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal" style="color:#c9a84c;">Watch & Learn</p>
+        <h2 class="reveal">The Science of Sound Healing</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:rgba(250,247,240,0.75); max-width:620px; margin:0 auto 10px;">
+          T. Lott, RN breaks down the clinical research behind sound healing — and why it belongs in every modern wellness practice.
+        </p>
+      </div>
+      <div class="video-wrap reveal">
+        <div style="max-width:700px;margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4)">
+          <mux-player playback-id="SrwUgxDMrfskdPabprIvI33fpgRfW6uArXP00FarZfbI" metadata-video-title="Sacred Cycles Wellness" style="width:100%;aspect-ratio:16/9" accent-color="#c9a84c"></mux-player>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIGITAL ART GALLERY -->
+  <section class="section-padding art-gallery" id="gallery">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal">NebulaPixels Collection</p>
+        <h2 class="reveal">Digital Art Gallery</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:#666; max-width:620px; margin:0 auto;">
+          Sacred cosmic art that mirrors the infinite within you. Each piece is a portal — an invitation to sit with beauty, wonder, and the divine.
+        </p>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item reveal reveal-delay-1">
+          <img
+            src="https://raw.githubusercontent.com/tinglott/artisy-store/main/nebula-pixels/art/cosmic_nebula_galaxy.png"
+            alt="Cosmic Nebula Galaxy — NebulaPixels"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="art-placeholder c1" style="display:none;">🌌</div>
+          <div class="gallery-overlay">
+            <div class="gallery-title">Cosmic Nebula Galaxy</div>
+            <a href="https://nebula-pixels-2.vercel.app" target="_blank" rel="noopener noreferrer" class="gallery-link">View Full Gallery →</a>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-2">
+          <img
+            src="https://raw.githubusercontent.com/tinglott/artisy-store/main/nebula-pixels/art/divine_geometry.png"
+            alt="Divine Geometry — NebulaPixels"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="art-placeholder c2" style="display:none;">✨</div>
+          <div class="gallery-overlay">
+            <div class="gallery-title">Divine Geometry</div>
+            <a href="https://nebula-pixels-2.vercel.app" target="_blank" rel="noopener noreferrer" class="gallery-link">View Full Gallery →</a>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-3">
+          <img
+            src="https://raw.githubusercontent.com/tinglott/artisy-store/main/nebula-pixels/art/celestial_madonna.png"
+            alt="Celestial Madonna — NebulaPixels"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="art-placeholder c3" style="display:none;">🌟</div>
+          <div class="gallery-overlay">
+            <div class="gallery-title">Celestial Madonna</div>
+            <a href="https://nebula-pixels-2.vercel.app" target="_blank" rel="noopener noreferrer" class="gallery-link">View Full Gallery →</a>
+          </div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-4">
+          <img
+            src="https://raw.githubusercontent.com/tinglott/artisy-store/main/nebula-pixels/art/nebula_creation.png"
+            alt="Nebula Creation — NebulaPixels"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="art-placeholder c4" style="display:none;">💫</div>
+          <div class="gallery-overlay">
+            <div class="gallery-title">Nebula Creation</div>
+            <a href="https://nebula-pixels-2.vercel.app" target="_blank" rel="noopener noreferrer" class="gallery-link">View Full Gallery →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center reveal" style="margin-top:40px;">
+        <a href="https://nebula-pixels-2.vercel.app" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">View Full Gallery →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOUND HEALING SCIENCE -->
+  <section class="section-padding sound-science">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal">Educational</p>
+        <h2 class="reveal">The Science of Sound Healing</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:#666; max-width:620px; margin:0 auto;">
+          From a registered nurse's perspective — the evidence behind healing frequencies and why they work.
+        </p>
+      </div>
+
+      <div class="science-grid">
+        <div class="science-card reveal reveal-delay-1">
+          <div class="science-freq">432 Hz</div>
+          <h4>The 432Hz Miracle</h4>
+          <p>Tuned to the natural frequency of the universe, 432Hz resonates at the same frequency as the Schumann resonance of the Earth's electromagnetic field. Research shows music tuned to 432Hz produces measurably lower stress responses and deeper states of meditative calm compared to standard 440Hz tuning.</p>
+        </div>
+        <div class="science-card reveal reveal-delay-2">
+          <div class="science-freq">🧠</div>
+          <h4>Binaural Brain Entrainment</h4>
+          <p>When two slightly different frequencies are presented to each ear independently, the brain perceives a third "phantom" frequency — the binaural beat. This phenomenon entrains brainwave patterns, guiding the mind into specific states: delta for deep sleep (1-4Hz), theta for meditation (4-8Hz), alpha for relaxed focus (8-14Hz).</p>
+        </div>
+        <div class="science-card reveal reveal-delay-3">
+          <div class="science-freq">528 Hz</div>
+          <h4>Solfeggio Frequencies Explained</h4>
+          <p>The ancient solfeggio scale — rediscovered by Dr. Joseph Puleo — comprises six core frequencies with specific healing properties. 528Hz (the "Love Frequency") has been shown in laboratory studies to repair damaged DNA. 396Hz releases guilt and fear patterns stored in the nervous system. These are not mystical claims but emerging areas of acoustic biology.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FULL CATALOG CTA -->
+  <section class="section-padding full-cta">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal" style="color:#c9a84c;">Complete Collection</p>
+        <h2 class="reveal">Shop the Full Healing Music &amp; Art Collection</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:rgba(250,247,240,0.75); max-width:560px; margin:0 auto 32px;">
+          Every title, every frequency, every piece of sacred art — all available in one place. The Artistry Store is the home of T. Lott's complete creative catalog.
+        </p>
+        <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary reveal">Visit the Artistry Store →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <h3>Sacred Cycles <span style="color:#faf7f0; font-weight:400;">Renewal</span></h3>
+          <p>Healing through sound, art, and sacred practice. T. Lott, RN — creator of Sacred Cycles Renewal.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Rooms</h4>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/bookstore/">📚 Book Store</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/nurses-corner/">🩺 Nurse's Corner</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/music-artistry/">🎵 Music & Artistry</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/blog/">📰 Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Links</h4>
+          <a href="https://sacred-cycles-renewal.vercel.app">Main Site</a>
+          <a href="https://www.artistrystore.com" target="_blank">Artistry Store</a>
+          <a href="https://nebula-pixels-2.vercel.app" target="_blank">NebulaPixels Gallery</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/#contact">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Sacred Cycles Renewal | T. Lott, RN. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" aria-label="Back to top"><i class="fa fa-arrow-up"></i></button>
+
+  <script>
+    (function() {
+      const bar = document.getElementById('reading-progress');
+      window.addEventListener('scroll', function() {
+        const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        bar.style.width = pct + '%';
+      }, { passive: true });
+    })();
+    (function() {
+      const nav = document.getElementById('navbar');
+      window.addEventListener('scroll', function() { nav.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+    })();
+    (function() {
+      const els = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+      els.forEach(function(el) { obs.observe(el); });
+    })();
+    (function() {
+      const btn = document.getElementById('back-to-top');
+      window.addEventListener('scroll', function() { btn.classList.toggle('visible', window.scrollY > 500); }, { passive: true });
+      btn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    })();
+  </script>
+</body>
+</html>

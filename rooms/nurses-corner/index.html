@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nurse's Corner | Psychiatric Nursing Meets Holistic Wellness | T. Lott, RN | Sacred Cycles</title>
+  <meta name="description" content="T. Lott, RN — 18 years of psychiatric nursing expertise meets holistic wellness. Evidence-based articles on mental health, stress management, sound therapy, and burnout recovery from a registered nurse's perspective." />
+  <meta name="keywords" content="psychiatric nurse, holistic wellness, RN wellness, mental health nursing, sound therapy nursing, compassion fatigue, burnout recovery nurse, vagus nerve, anxiety relief, stress management nurse, evidence-based holistic health" />
+  <meta name="author" content="T. Lott, RN" />
+  <meta property="og:title" content="Nurse's Corner: Where Science Meets Soul | T. Lott, RN" />
+  <meta property="og:description" content="18 years of psychiatric nursing experience distilled into evidence-based wellness wisdom. Articles, insights, and resources from T. Lott, RN." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sacred-cycles-renewal.vercel.app/rooms/nurses-corner/" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lato', sans-serif; background: #faf7f0; color: #2c2c2c; line-height: 1.7; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    #reading-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, #c9a84c, #e8d48b, #c9a84c);
+      z-index: 10001; transition: width 0.1s linear;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; color: #1a3c2a; line-height: 1.25; }
+    h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
+    h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 600; }
+    h3 { font-size: clamp(1.15rem, 2.5vw, 1.5rem); font-weight: 600; }
+    h4 { font-size: 1.05rem; font-weight: 600; }
+
+    .section-subtitle {
+      font-family: 'Playfair Display', serif;
+      color: #c9a84c; font-size: 0.9rem; letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .section-divider { width: 60px; height: 2px; background: #c9a84c; margin: 1rem auto 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .text-center { text-align: center; }
+    .section-padding { padding: 100px 0; }
+
+    .btn {
+      display: inline-block; padding: 13px 32px; border-radius: 50px;
+      font-family: 'Lato', sans-serif; font-weight: 700; font-size: 0.88rem;
+      letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+      transition: all 0.35s ease; border: 2px solid transparent;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #c9a84c, #e0c571); color: #0d2818;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.45); }
+    .btn-secondary { background: transparent; border-color: #c9a84c; color: #c9a84c; }
+    .btn-secondary:hover { background: #c9a84c; color: #0d2818; transform: translateY(-2px); }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
+      padding: 16px 0; background: rgba(13,40,24,0.92);
+      backdrop-filter: blur(18px); border-bottom: 1px solid rgba(201,168,76,0.15);
+      transition: padding 0.3s;
+    }
+    .navbar.scrolled { padding: 10px 0; box-shadow: 0 4px 30px rgba(0,0,0,0.2); }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: #c9a84c; }
+    .nav-brand span { color: #faf7f0; font-weight: 400; }
+    .nav-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .nav-links a { color: #faf7f0; font-size: 0.82rem; transition: color 0.3s; }
+    .nav-links a:hover { color: #c9a84c; }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+
+    /* HERO */
+    .hero {
+      min-height: 75vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(155deg, #0d2818 0%, #1a3c2a 45%, #234d35 100%);
+      padding: 150px 24px 90px; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0; opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 5 L20 35 M5 20 L35 20' stroke='%23c9a84c' stroke-width='0.5' fill='none'/%3E%3C/svg%3E");
+      background-size: 50px 50px;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-block; padding: 7px 22px; border-radius: 50px;
+      border: 1px solid rgba(201,168,76,0.4); background: rgba(201,168,76,0.1);
+      color: #c9a84c; font-size: 0.78rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 { color: #faf7f0; margin-bottom: 1rem; }
+    .hero h1 em { font-style: normal; color: #c9a84c; }
+    .hero-byline { color: #c9a84c; font-size: 0.9rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 1.2rem; }
+    .hero-subtitle { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: rgba(250,247,240,0.8); margin-bottom: 2rem; line-height: 1.8; max-width: 700px; margin-left: auto; margin-right: auto; }
+
+    /* CREDENTIALS BANNER */
+    .credentials-banner {
+      background: #faf7f0;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      padding: 30px 0;
+      overflow-x: auto;
+    }
+    .credentials-scroll {
+      display: flex; gap: 40px; align-items: center; justify-content: center;
+      flex-wrap: wrap; padding: 0 24px;
+    }
+    .cred-item {
+      display: flex; align-items: center; gap: 10px; white-space: nowrap;
+    }
+    .cred-icon { font-size: 1.5rem; }
+    .cred-text { font-weight: 700; font-size: 0.88rem; color: #1a3c2a; text-transform: uppercase; letter-spacing: 1px; }
+    .cred-separator { color: #c9a84c; font-size: 1.2rem; }
+
+    /* ARTICLES GRID */
+    .articles { background: #faf7f0; }
+    .articles-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 50px;
+    }
+    @media (max-width: 900px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 580px) { .articles-grid { grid-template-columns: 1fr; } }
+
+    .article-card {
+      background: #fff; border-radius: 18px; padding: 32px;
+      border: 1px solid rgba(26,60,42,0.08);
+      box-shadow: 0 3px 20px rgba(26,60,42,0.05);
+      transition: all 0.35s; position: relative;
+    }
+    .article-card:hover { transform: translateY(-7px); box-shadow: 0 14px 44px rgba(26,60,42,0.1); }
+    .article-category {
+      display: inline-block; padding: 4px 14px; border-radius: 50px;
+      border: 1px solid rgba(201,168,76,0.4); color: #c9a84c;
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+    .article-card h3 { color: #1a3c2a; margin-bottom: 10px; font-size: 1.15rem; line-height: 1.4; }
+    .article-card p { color: #555; font-size: 0.88rem; line-height: 1.65; margin-bottom: 16px; }
+    .article-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.78rem; color: #999;
+    }
+    .read-more { color: #c9a84c; font-weight: 700; font-size: 0.82rem; transition: color 0.3s; }
+    .read-more:hover { color: #1a3c2a; }
+    .read-time {
+      background: rgba(201,168,76,0.1); color: #1a3c2a; padding: 3px 10px; border-radius: 50px;
+      font-size: 0.72rem; font-weight: 700;
+    }
+
+    /* ASK THE NURSE */
+    .ask-nurse { background: linear-gradient(160deg, #0d2818, #1a3c2a); }
+    .ask-nurse h2 { color: #faf7f0; }
+    .ask-form-wrap { max-width: 640px; margin: 44px auto 0; }
+    .ask-form {
+      background: rgba(250,247,240,0.05); border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 20px; padding: 44px 40px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block; color: rgba(250,247,240,0.8); font-size: 0.82rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%; padding: 14px 18px; border-radius: 12px;
+      border: 1px solid rgba(201,168,76,0.2);
+      background: rgba(250,247,240,0.06); color: #faf7f0;
+      font-family: 'Lato', sans-serif; font-size: 0.92rem;
+      transition: border-color 0.3s;
+    }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(250,247,240,0.3); }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #c9a84c; }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+
+    /* RESOURCES */
+    .resources { background: #faf7f0; }
+    .resources-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 50px;
+    }
+    @media (max-width: 768px) { .resources-grid { grid-template-columns: 1fr; } }
+    .resource-card {
+      background: #fff; border-radius: 18px; padding: 36px 28px; text-align: center;
+      border: 1px solid rgba(26,60,42,0.08);
+      box-shadow: 0 3px 18px rgba(26,60,42,0.05);
+      transition: all 0.35s;
+    }
+    .resource-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(26,60,42,0.1); }
+    .resource-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .resource-card h4 { color: #1a3c2a; margin-bottom: 10px; }
+    .resource-card p { color: #666; font-size: 0.88rem; margin-bottom: 20px; line-height: 1.6; }
+
+    /* FOOTER */
+    .footer { background: #0a1f14; padding: 50px 0 28px; border-top: 1px solid rgba(201,168,76,0.1); }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 36px; }
+    @media (max-width: 768px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .footer-inner { grid-template-columns: 1fr; } }
+    .footer-brand h3 { font-family: 'Cormorant Garamond', serif; color: #c9a84c; font-size: 1.4rem; margin-bottom: 10px; }
+    .footer-brand p { color: rgba(250,247,240,0.5); font-size: 0.88rem; line-height: 1.7; }
+    .footer-col h4 { color: #faf7f0; font-family: 'Lato', sans-serif; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+    .footer-col a { display: block; color: rgba(250,247,240,0.5); font-size: 0.88rem; padding: 5px 0; transition: color 0.3s; }
+    .footer-col a:hover { color: #c9a84c; }
+    .footer-bottom { border-top: 1px solid rgba(250,247,240,0.06); padding-top: 20px; text-align: center; }
+    .footer-bottom p { color: rgba(250,247,240,0.35); font-size: 0.78rem; }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+
+    #back-to-top {
+      position: fixed; bottom: 30px; right: 30px; width: 48px; height: 48px;
+      border-radius: 50%; border: 1px solid rgba(201,168,76,0.3);
+      background: rgba(13,40,24,0.9); color: #c9a84c;
+      backdrop-filter: blur(12px); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 9990;
+    }
+    #back-to-top.visible { opacity: 1; visibility: visible; }
+    #back-to-top:hover { background: #c9a84c; color: #0d2818; }
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="nav-brand"><a href="https://sacred-cycles-renewal.vercel.app">Sacred Cycles <span>| Renewal</span></a></div>
+      <div class="nav-links">
+        <a href="https://sacred-cycles-renewal.vercel.app/#rooms">All Rooms</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/bookstore/">📚 Book Store</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/nurses-corner/">🩺 Nurse's Corner</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/music-artistry/">🎵 Music & Artistry</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/blog/">📰 Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Clinical Authority</div>
+      <h1>The Nurse's Corner: Where <em>Science Meets Soul</em></h1>
+      <p class="hero-byline">By T. Lott, RN &nbsp;|&nbsp; 18 Years Psychiatric Nursing</p>
+      <p class="hero-subtitle">Evidence-based wellness insights rooted in nearly two decades of frontline psychiatric care. Because true healing requires both clinical rigor and spiritual depth — and you deserve both.</p>
+      <a href="#articles" class="btn btn-primary">Read Latest Articles</a>
+    </div>
+  </section>
+
+  <!-- CREDENTIALS BANNER -->
+  <div class="credentials-banner">
+    <div class="credentials-scroll">
+      <div class="cred-item"><span class="cred-icon">🏥</span><span class="cred-text">Registered Nurse</span></div>
+      <span class="cred-separator">✦</span>
+      <div class="cred-item"><span class="cred-icon">🧠</span><span class="cred-text">18 Years Psychiatric Experience</span></div>
+      <span class="cred-separator">✦</span>
+      <div class="cred-item"><span class="cred-icon">💊</span><span class="cred-text">Holistic Health Advocate</span></div>
+      <span class="cred-separator">✦</span>
+      <div class="cred-item"><span class="cred-icon">📚</span><span class="cred-text">Evidence-Based Practice</span></div>
+    </div>
+  </div>
+
+  <!-- FEATURED ARTICLES -->
+  <section class="section-padding articles" id="articles">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal">Clinical Wisdom</p>
+        <h2 class="reveal">Featured Articles</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:#666; max-width:620px; margin:0 auto;">
+          Where psychiatric nursing expertise meets holistic healing wisdom — articles written to empower, educate, and transform.
+        </p>
+      </div>
+
+      <div class="articles-grid">
+        <!-- Article 1 -->
+        <div class="article-card reveal reveal-delay-1">
+          <div class="article-category">Mental Health</div>
+          <h3>Why Psychiatric Nurses Are Turning to Sound Therapy (And What the Research Shows)</h3>
+          <p>Across hospital units and wellness centers nationwide, a quiet revolution is unfolding: psychiatric nurses are incorporating sound therapy into their clinical toolkit. From tuning forks in therapy rooms to binaural beats in sleep protocols, the intersection of auditory science and mental health is producing remarkable results. Research on frequency-based interventions shows measurable reductions in cortisol levels and anxiety scores. As someone who has spent 18 years on psychiatric units, I've witnessed firsthand how sound can regulate nervous systems that medication alone cannot reach. Here's what the evidence actually shows — and how to apply it safely.</p>
+          <div class="article-meta">
+            <a href="#article-coming-soon" class="read-more">Read More →</a>
+            <span class="read-time">8 min read</span>
+          </div>
+        </div>
+
+        <!-- Article 2 -->
+        <div class="article-card reveal reveal-delay-2">
+          <div class="article-category">Stress Management</div>
+          <h3>The Vagus Nerve: A Nurse's Guide to Activating Your Body's Calm Switch</h3>
+          <p>The vagus nerve is the longest cranial nerve in the body — and it's essentially your internal calm switch. As a psychiatric nurse, I've observed how vagal tone correlates directly with emotional regulation, resilience to stress, and recovery from trauma. The good news: unlike many aspects of our nervous system, vagal tone is highly trainable. Through specific breathwork patterns, cold exposure, humming, and targeted acupressure points, you can literally rewire your body's stress response. This guide breaks down the neuroscience in plain English and gives you four nurse-approved techniques to stimulate your vagus nerve starting today.</p>
+          <div class="article-meta">
+            <a href="#article-coming-soon" class="read-more">Read More →</a>
+            <span class="read-time">10 min read</span>
+          </div>
+        </div>
+
+        <!-- Article 3 -->
+        <div class="article-card reveal reveal-delay-3">
+          <div class="article-category">Burnout Recovery</div>
+          <h3>Compassion Fatigue: 7 Clinical Strategies I Use After a Hard Shift</h3>
+          <p>There's a particular kind of exhaustion that settles into your bones after a twelve-hour psychiatric shift — one that sleep alone won't fix. Compassion fatigue is real, clinically recognized, and devastatingly common among healthcare workers. After 18 years of absorbing the emotional weight of my patients' suffering, I developed a personal protocol for recovery that goes far beyond "self-care Sundays." These seven strategies are grounded in neuroscience, somatic therapy, and ancient healing wisdom. They've kept me functional, present, and still deeply committed to this work. I'm sharing them because nurses deserve to be healed too.</p>
+          <div class="article-meta">
+            <a href="#article-coming-soon" class="read-more">Read More →</a>
+            <span class="read-time">9 min read</span>
+          </div>
+        </div>
+
+        <!-- Article 4 -->
+        <div class="article-card reveal reveal-delay-4">
+          <div class="article-category">Holistic Nursing</div>
+          <h3>What 18 Years in Psychiatric Nursing Taught Me About Healing Trauma</h3>
+          <p>I've sat beside thousands of people in the deepest valleys of their lives. I've held space for acute psychiatric crises, suicidal ideation, and the raw aftermath of trauma. What those 18 years revealed — what no nursing textbook could have told me — is that trauma heals through relationship, regulation, and ritual, not just medication. The body holds trauma at a cellular level. The nervous system remembers what the mind tries to forget. Real healing requires meeting patients where they are: in the body, in the present moment, and in the sacred space between what was and what can be. This is what I've learned, and why I created Sacred Cycles.</p>
+          <div class="article-meta">
+            <a href="#article-coming-soon" class="read-more">Read More →</a>
+            <span class="read-time">12 min read</span>
+          </div>
+        </div>
+
+        <!-- Article 5 -->
+        <div class="article-card reveal reveal-delay-5">
+          <div class="article-category">Crystal Healing</div>
+          <h3>Crystal Healing Meets Clinical Practice: What Nurses Need to Know</h3>
+          <p>When I first introduced crystals into my personal wellness routine, I did so cautiously — as any evidence-trained nurse would. What I found surprised me: not that crystals have magical properties, but that they serve as powerful anchors for intention, presence, and ritual — all of which have measurable psychological benefits. The placebo effect is real and clinically significant. Mindfulness-based interventions work. And tactile, sensory objects can activate the parasympathetic nervous system in ways that are entirely evidence-adjacent. Here's how to think about crystal healing from a clinical nursing perspective — with intellectual honesty and genuine openness.</p>
+          <div class="article-meta">
+            <a href="#article-coming-soon" class="read-more">Read More →</a>
+            <span class="read-time">7 min read</span>
+          </div>
+        </div>
+
+        <!-- Article 6 -->
+        <div class="article-card reveal reveal-delay-6">
+          <div class="article-category">Anxiety Relief</div>
+          <h3>Acupressure for Anxiety: The Evidence-Based Guide from a Psychiatric RN</h3>
+          <p>In my psychiatric nursing career, I've administered more PRN anxiolytics than I can count. But I've also watched patients achieve remarkable anxiety reduction through targeted acupressure — without a single milligram of medication. The pericardium 6 point, the heart 7 point, the triple warmer meridian — these aren't mystical concepts. They're pressure points with documented effects on the autonomic nervous system, validated across multiple clinical studies. This guide teaches you the six most clinically supported acupressure points for anxiety, with step-by-step technique descriptions that any layperson can safely apply in moments of acute stress.</p>
+          <div class="article-meta">
+            <a href="#article-coming-soon" class="read-more">Read More →</a>
+            <span class="read-time">11 min read</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASK THE NURSE -->
+  <section class="section-padding ask-nurse">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal" style="color:#c9a84c;">Get Answers</p>
+        <h2 class="reveal">Ask the Nurse</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:rgba(250,247,240,0.75); max-width:580px; margin:0 auto;">
+          Have a wellness question you've been afraid to ask your doctor? Submit it here. T. Lott, RN reads every question and answers selected ones in future articles.
+        </p>
+      </div>
+
+      <div class="ask-form-wrap">
+        <form class="ask-form reveal" action="https://formspree.io/f/xlgozblw" method="POST">
+          <div class="form-group">
+            <label for="nurse-name">Your Name <span style="color:#c9a84c;">*</span></label>
+            <input type="text" id="nurse-name" name="name" placeholder="First name is fine" required />
+          </div>
+          <div class="form-group">
+            <label for="nurse-email">Email Address <span style="color:#c9a84c;">*</span></label>
+            <input type="email" id="nurse-email" name="email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="nurse-question">Your Wellness Question <span style="color:#c9a84c;">*</span></label>
+            <textarea id="nurse-question" name="question" placeholder="Ask your question here — no topic is too sensitive. T. Lott, RN has seen it all..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; border:none; font-size:0.95rem; padding:16px;">Submit Your Question</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section class="section-padding resources">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal">Free Resources</p>
+        <h2 class="reveal">Wellness Guides & Downloads</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:#666; max-width:580px; margin:0 auto;">
+          Practical tools created by a psychiatric nurse to support your daily wellness practice.
+        </p>
+      </div>
+
+      <div class="resources-grid">
+        <div class="resource-card reveal reveal-delay-1">
+          <div class="resource-icon">📋</div>
+          <h4>Psychiatric Self-Care Checklist</h4>
+          <p>A daily mental health check-in tool developed from 18 years of clinical practice. Track your mood, stress, sleep, and social connection in under 5 minutes.</p>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding:10px 24px; font-size:0.8rem;">Download Free</a>
+        </div>
+        <div class="resource-card reveal reveal-delay-2">
+          <div class="resource-icon">🌬️</div>
+          <h4>Nurse's Breathwork Guide</h4>
+          <p>Five clinically-informed breathing techniques with step-by-step instructions. From box breathing to 4-7-8 to physiological sigh — all explained from a nursing lens.</p>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding:10px 24px; font-size:0.8rem;">Download Free</a>
+        </div>
+        <div class="resource-card reveal reveal-delay-3">
+          <div class="resource-icon">💆</div>
+          <h4>Stress & Burnout Assessment</h4>
+          <p>A comprehensive 20-question wellness assessment to identify your stress archetype, burnout level, and recommended healing modalities — straight from the Sacred Cycles program.</p>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding:10px 24px; font-size:0.8rem;">Take Assessment</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <h3>Sacred Cycles <span style="color:#faf7f0; font-weight:400;">Renewal</span></h3>
+          <p>Where clinical expertise meets spiritual wisdom. T. Lott, RN — 18 years psychiatric nursing, creator of Sacred Cycles Renewal.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Rooms</h4>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/bookstore/">📚 Book Store</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/nurses-corner/">🩺 Nurse's Corner</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/music-artistry/">🎵 Music & Artistry</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/blog/">📰 Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Links</h4>
+          <a href="https://sacred-cycles-renewal.vercel.app">Main Site</a>
+          <a href="https://www.artistrystore.com" target="_blank">Artistry Store</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/#pricing">Enroll Now</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/#contact">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Sacred Cycles Renewal | T. Lott, RN. All rights reserved.</p>
+        <p style="margin-top:8px; font-style:italic; font-size:0.74rem; max-width:650px; margin-left:auto; margin-right:auto;">
+          Disclaimer: Articles are for educational purposes only. This content is not medical advice and does not create a nurse-patient relationship. Always consult a licensed healthcare provider.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" aria-label="Back to top"><i class="fa fa-arrow-up"></i></button>
+
+  <script>
+    (function() {
+      const bar = document.getElementById('reading-progress');
+      window.addEventListener('scroll', function() {
+        const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        bar.style.width = pct + '%';
+      }, { passive: true });
+    })();
+    (function() {
+      const nav = document.getElementById('navbar');
+      window.addEventListener('scroll', function() { nav.classList.toggle('scrolled', window.scrollY > 60); }, { passive: true });
+    })();
+    (function() {
+      const els = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+      els.forEach(function(el) { obs.observe(el); });
+    })();
+    (function() {
+      const btn = document.getElementById('back-to-top');
+      window.addEventListener('scroll', function() { btn.classList.toggle('visible', window.scrollY > 500); }, { passive: true });
+      btn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    })();
+  </script>
+</body>
+</html>

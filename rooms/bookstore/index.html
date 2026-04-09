@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sacred Library: Books & Audiobooks | Sacred Cycles Renewal by T. Lott, RN</title>
+  <meta name="description" content="Explore healing audiobooks and spiritual books by T. Lott, RN — including Closer to Jesus, Words of Life, From Dragonflies to Distant Stars, and more. Curated for your holistic wellness journey." />
+  <meta name="keywords" content="healing audiobooks, spiritual books, T. Lott RN, Sacred Cycles, holistic wellness books, Christian audiobooks, devotional audio, spiritual awakening" />
+  <meta name="author" content="T. Lott, RN" />
+  <meta property="og:title" content="Sacred Library: Books & Audiobooks | Sacred Cycles Renewal" />
+  <meta property="og:description" content="Audiobooks and curated reads by T. Lott, RN — for the healing journey." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sacred-cycles-renewal.vercel.app/rooms/bookstore/" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Lato', sans-serif; background: #faf7f0; color: #2c2c2c; line-height: 1.7; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    #reading-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, #c9a84c, #e8d48b, #c9a84c);
+      z-index: 10001; transition: width 0.1s linear;
+      box-shadow: 0 0 8px rgba(201,168,76,0.5);
+    }
+
+    h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; color: #1a3c2a; line-height: 1.2; }
+    h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 700; }
+    h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 600; }
+    h3 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-weight: 600; }
+    h4 { font-size: 1.1rem; font-weight: 600; }
+
+    .section-subtitle {
+      font-family: 'Playfair Display', serif;
+      color: #c9a84c; font-size: 0.95rem; letter-spacing: 3px;
+      text-transform: uppercase; margin-bottom: 0.5rem; font-weight: 400;
+    }
+    .section-divider { width: 60px; height: 2px; background: #c9a84c; margin: 1rem auto 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .text-center { text-align: center; }
+    .section-padding { padding: 100px 0; }
+    .cream-bg { background: #faf7f0; }
+    .green-bg { background: #1a3c2a; color: #faf7f0; }
+    .deep-green-bg { background: #0d2818; color: #faf7f0; }
+
+    .btn {
+      display: inline-block; padding: 14px 36px; border-radius: 50px;
+      font-family: 'Lato', sans-serif; font-weight: 700; font-size: 0.9rem;
+      letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+      transition: all 0.35s ease; border: 2px solid transparent;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #c9a84c, #e0c571); color: #0d2818;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.45); }
+    .btn-secondary { background: transparent; border-color: #c9a84c; color: #c9a84c; }
+    .btn-secondary:hover { background: #c9a84c; color: #0d2818; transform: translateY(-2px); }
+    .btn-white { background: #faf7f0; color: #1a3c2a; }
+    .btn-white:hover { background: #fff; transform: translateY(-2px); }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
+      padding: 16px 0;
+      background: rgba(13, 40, 24, 0.92);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+      transition: padding 0.3s;
+    }
+    .navbar.scrolled { padding: 10px 0; box-shadow: 0 4px 30px rgba(0,0,0,0.2); }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: #c9a84c; }
+    .nav-brand span { color: #faf7f0; font-weight: 400; }
+    .nav-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .nav-links a { color: #faf7f0; font-size: 0.85rem; font-weight: 400; transition: color 0.3s; }
+    .nav-links a:hover { color: #c9a84c; }
+
+    @media (max-width: 900px) {
+      .nav-links { gap: 12px; }
+      .nav-links a { font-size: 0.78rem; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 70vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(160deg, #0d2818 0%, #1a3c2a 50%, #234d35 100%);
+      padding: 140px 24px 80px; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(201,168,76,0.07) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 30%, rgba(201,168,76,0.05) 0%, transparent 50%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 850px; margin: 0 auto; }
+    .hero h1 { color: #faf7f0; margin-bottom: 1.2rem; }
+    .hero h1 em { font-style: normal; color: #c9a84c; }
+    .hero-subtitle { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: rgba(250,247,240,0.8); margin-bottom: 2rem; line-height: 1.8; }
+    .hero-badge {
+      display: inline-block; padding: 8px 24px; border-radius: 50px;
+      border: 1px solid rgba(201,168,76,0.4); background: rgba(201,168,76,0.1);
+      color: #c9a84c; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+
+    /* PRODUCT CARDS */
+    .products-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; margin-top: 50px;
+    }
+    @media (max-width: 700px) { .products-grid { grid-template-columns: 1fr; } }
+
+    .product-card {
+      background: #fff; border-radius: 20px; padding: 40px 32px;
+      border: 1px solid rgba(26,60,42,0.08);
+      box-shadow: 0 4px 24px rgba(26,60,42,0.06);
+      transition: all 0.35s; position: relative;
+    }
+    .product-card:hover { transform: translateY(-8px); box-shadow: 0 16px 50px rgba(26,60,42,0.12); }
+    .product-icon { font-size: 2.8rem; margin-bottom: 16px; }
+    .product-stars { color: #c9a84c; font-size: 1rem; margin-bottom: 12px; }
+    .product-card h3 { color: #1a3c2a; margin-bottom: 8px; }
+    .product-card p { color: #555; font-size: 0.95rem; margin-bottom: 16px; line-height: 1.6; }
+    .product-price {
+      font-family: 'Cormorant Garamond', serif; font-size: 2rem;
+      font-weight: 700; color: #1a3c2a; margin-bottom: 20px;
+    }
+    .product-price span { font-size: 1rem; font-weight: 400; color: #888; }
+    .product-tag {
+      display: inline-block; padding: 4px 14px; border-radius: 50px;
+      background: linear-gradient(135deg, #c9a84c, #e0c571); color: #0d2818;
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    /* FREE PREVIEW */
+    .free-preview { background: linear-gradient(160deg, #0d2818, #1a3c2a); }
+    .free-preview h2 { color: #faf7f0; }
+    .preview-card {
+      background: rgba(250,247,240,0.06); border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 20px; padding: 48px; text-align: center; max-width: 700px; margin: 40px auto 0;
+    }
+    .play-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #c9a84c, #e0c571); color: #0d2818;
+      padding: 16px 40px; border-radius: 50px; font-weight: 700; font-size: 1rem;
+      letter-spacing: 1px; text-transform: uppercase; margin-top: 20px;
+      transition: all 0.3s; box-shadow: 0 6px 24px rgba(201,168,76,0.3);
+    }
+    .play-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(201,168,76,0.4); }
+    .play-btn i { font-size: 1.2rem; }
+
+    /* RECOMMENDED READING */
+    .recommended { background: #faf7f0; }
+    .reading-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 50px;
+    }
+    @media (max-width: 768px) { .reading-grid { grid-template-columns: 1fr; } }
+    .reading-card {
+      background: #fff; border-radius: 16px; padding: 32px;
+      border: 1px solid rgba(26,60,42,0.08);
+      box-shadow: 0 2px 16px rgba(26,60,42,0.04);
+      transition: all 0.3s;
+    }
+    .reading-card:hover { transform: translateY(-5px); box-shadow: 0 10px 36px rgba(26,60,42,0.1); }
+    .book-cover {
+      height: 120px; border-radius: 10px;
+      background: linear-gradient(135deg, #1a3c2a, #c9a84c);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; margin-bottom: 20px;
+    }
+    .reading-card h4 { color: #1a3c2a; margin-bottom: 6px; }
+    .reading-card .author { color: #c9a84c; font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; }
+    .reading-card p { color: #666; font-size: 0.9rem; line-height: 1.6; }
+
+    /* NEWSLETTER */
+    .newsletter { background: #0d2818; }
+    .newsletter h2 { color: #faf7f0; }
+    .newsletter-form {
+      max-width: 560px; margin: 40px auto 0;
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .newsletter-form input {
+      flex: 1; min-width: 220px; padding: 16px 22px; border-radius: 50px;
+      border: 1px solid rgba(201,168,76,0.3); background: rgba(250,247,240,0.08);
+      color: #faf7f0; font-family: 'Lato', sans-serif; font-size: 0.95rem;
+    }
+    .newsletter-form input::placeholder { color: rgba(250,247,240,0.4); }
+    .newsletter-form input:focus { outline: none; border-color: #c9a84c; }
+    .newsletter-form button {
+      padding: 16px 32px; border-radius: 50px; border: none;
+      background: linear-gradient(135deg, #c9a84c, #e0c571); color: #0d2818;
+      font-family: 'Lato', sans-serif; font-weight: 700; font-size: 0.9rem;
+      letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .newsletter-form button:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.4); }
+
+    /* FOOTER */
+    .footer { background: #0a1f14; padding: 50px 0 28px; border-top: 1px solid rgba(201,168,76,0.1); }
+    .footer-inner {
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 36px;
+    }
+    @media (max-width: 768px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .footer-inner { grid-template-columns: 1fr; } }
+    .footer-brand h3 { font-family: 'Cormorant Garamond', serif; color: #c9a84c; font-size: 1.4rem; margin-bottom: 10px; }
+    .footer-brand p { color: rgba(250,247,240,0.5); font-size: 0.88rem; line-height: 1.7; }
+    .footer-col h4 { color: #faf7f0; font-family: 'Lato', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+    .footer-col a { display: block; color: rgba(250,247,240,0.5); font-size: 0.88rem; padding: 5px 0; transition: color 0.3s; }
+    .footer-col a:hover { color: #c9a84c; }
+    .footer-bottom { border-top: 1px solid rgba(250,247,240,0.06); padding-top: 20px; text-align: center; }
+    .footer-bottom p { color: rgba(250,247,240,0.35); font-size: 0.78rem; }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* BACK TO TOP */
+    #back-to-top {
+      position: fixed; bottom: 30px; right: 30px; width: 48px; height: 48px;
+      border-radius: 50%; border: 1px solid rgba(201,168,76,0.3);
+      background: rgba(13,40,24,0.9); color: #c9a84c;
+      backdrop-filter: blur(12px); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 9990;
+    }
+    #back-to-top.visible { opacity: 1; visibility: visible; }
+    #back-to-top:hover { background: #c9a84c; color: #0d2818; }
+  </style>
+</head>
+<body>
+
+  <div id="reading-progress"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="nav-brand"><a href="https://sacred-cycles-renewal.vercel.app">Sacred Cycles <span>| Renewal</span></a></div>
+      <div class="nav-links">
+        <a href="https://sacred-cycles-renewal.vercel.app/#rooms">All Rooms</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/bookstore/">📚 Book Store</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/nurses-corner/">🩺 Nurse's Corner</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/music-artistry/">🎵 Music & Artistry</a>
+        <a href="https://sacred-cycles-renewal.vercel.app/rooms/blog/">📰 Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">The Sacred Library</div>
+      <h1>Books &amp; Audiobooks for the <em>Healing Journey</em></h1>
+      <p class="hero-subtitle">Curated works by T. Lott, RN — where clinical wisdom meets spiritual depth. Each title is crafted to guide your heart, heal your mind, and awaken your spirit.</p>
+      <a href="#audiobooks" class="btn btn-primary">Browse the Collection</a>
+    </div>
+  </section>
+
+  <!-- FEATURED AUDIOBOOK BUNDLES -->
+  <section class="section-padding cream-bg" id="audiobooks">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal">Digital Artistry Store</p>
+        <h2 class="reveal">Featured Audiobook Bundles</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:#666; max-width:620px; margin:0 auto;">
+          T. Lott's audiobook collection — spiritual journeys in audio form. Each title available for instant download on the Artistry Store.
+        </p>
+      </div>
+
+      <div class="products-grid">
+        <!-- Closer to Jesus -->
+        <div class="product-card reveal reveal-delay-1">
+          <div class="product-icon">🎧</div>
+          <div class="product-tag">5-Part Audio Journey</div>
+          <div class="product-stars">⭐⭐⭐⭐⭐</div>
+          <h3>Closer to Jesus</h3>
+          <p>An intimate five-part audio journey that draws you deeper into your faith through guided reflection, scripture, and meditative prayer. Perfect for quiet mornings or late-night rest.</p>
+          <div class="product-price">$4.99 <span>/ audiobook</span></div>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i class="fa fa-shopping-cart" style="margin-right:8px;"></i>Buy Now
+          </a>
+        </div>
+
+        <!-- Words of Life -->
+        <div class="product-card reveal reveal-delay-2">
+          <div class="product-icon">🎧</div>
+          <div class="product-tag">Devotional Audio</div>
+          <div class="product-stars">⭐⭐⭐⭐⭐</div>
+          <h3>Words of Life</h3>
+          <p>Uplifting devotional audio that breathes life into everyday moments. T. Lott's warm narration and heartfelt reflections make this a daily companion for the soul seeking encouragement.</p>
+          <div class="product-price">$4.99 <span>/ audiobook</span></div>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i class="fa fa-shopping-cart" style="margin-right:8px;"></i>Buy Now
+          </a>
+        </div>
+
+        <!-- From Dragonflies to Distant Stars -->
+        <div class="product-card reveal reveal-delay-3">
+          <div class="product-icon">🎧</div>
+          <div class="product-tag">Cosmic Spiritual Journey</div>
+          <div class="product-stars">⭐⭐⭐⭐⭐</div>
+          <h3>From Dragonflies to Distant Stars</h3>
+          <p>A cosmic spiritual audio journey that travels from the delicate to the infinite — exploring the sacred beauty in nature, time, and the mystery of existence. Poetic and deeply moving.</p>
+          <div class="product-price">$4.99 <span>/ audiobook</span></div>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i class="fa fa-shopping-cart" style="margin-right:8px;"></i>Buy Now
+          </a>
+        </div>
+
+        <!-- Spiritual Awakening -->
+        <div class="product-card reveal reveal-delay-4">
+          <div class="product-icon">🎧</div>
+          <div class="product-tag">Deep Awakening Guide</div>
+          <div class="product-stars">⭐⭐⭐⭐⭐</div>
+          <h3>Spiritual Awakening</h3>
+          <p>A deep awakening audio guide that leads you through the stages of spiritual consciousness expansion. Drawing on 18 years of clinical and spiritual insight, this is transformation in audio form.</p>
+          <div class="product-price">$4.99 <span>/ audiobook</span></div>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i class="fa fa-shopping-cart" style="margin-right:8px;"></i>Buy Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREE PREVIEW -->
+  <section class="section-padding free-preview">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal" style="color:#c9a84c;">Before You Buy</p>
+        <h2 class="reveal">Listen Before You Buy</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:rgba(250,247,240,0.75); max-width:600px; margin:0 auto;">
+          Experience the healing power of T. Lott's voice before you commit. A free sample of our most beloved title awaits you.
+        </p>
+      </div>
+
+      <div class="preview-card reveal">
+        <div style="font-size:3rem; margin-bottom:16px;">🎧</div>
+        <h3 style="color:#faf7f0; margin-bottom:10px;">Closer to Jesus — Part 1 (Free Sample)</h3>
+        <p style="color:rgba(250,247,240,0.7); font-size:0.95rem; margin-bottom:8px;">Experience the opening chapter of this powerful 5-part audio journey — completely free. Let it move you before you decide.</p>
+        <p style="color:rgba(250,247,240,0.5); font-size:0.85rem; margin-bottom:24px;">🕐 ~12 minutes · Narrated by T. Lott, RN</p>
+        <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" class="play-btn">
+          <i class="fa fa-play"></i> Play Free Sample
+        </a>
+        <p style="color:rgba(250,247,240,0.4); font-size:0.82rem; margin-top:20px;">
+          Want the full collection? <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer" style="color:#c9a84c; text-decoration:underline;">Browse the complete Artistry Store catalog →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDED READING -->
+  <section class="section-padding recommended">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal">T. Lott's Picks</p>
+        <h2 class="reveal">Recommended Reading</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:#666; max-width:600px; margin:0 auto;">
+          Beyond T. Lott's own works, these titles have shaped the Sacred Cycles philosophy and are recommended for every healing journey.
+        </p>
+      </div>
+
+      <div class="reading-grid">
+        <div class="reading-card reveal reveal-delay-1">
+          <div class="book-cover">📖</div>
+          <h4>The Body Keeps the Score</h4>
+          <div class="author">By Bessel van der Kolk, M.D.</div>
+          <p>The landmark clinical study on how trauma lives in the body — and the healing modalities (including yoga, EMDR, and mindfulness) that free it. Required reading for anyone on a healing journey.</p>
+        </div>
+        <div class="reading-card reveal reveal-delay-2">
+          <div class="book-cover" style="background: linear-gradient(135deg, #234d35, #c9a84c);">🕊️</div>
+          <h4>You Can Heal Your Life</h4>
+          <div class="author">By Louise Hay</div>
+          <p>A timeless masterpiece connecting thought patterns to physical well-being. Louise Hay's affirmations and mind-body philosophy beautifully complement the Sacred Cycles framework of holistic renewal.</p>
+        </div>
+        <div class="reading-card reveal reveal-delay-3">
+          <div class="book-cover" style="background: linear-gradient(135deg, #0d2818, #c9a84c);">✨</div>
+          <h4>The Power of Now</h4>
+          <div class="author">By Eckhart Tolle</div>
+          <p>Eckhart Tolle's spiritual classic on present-moment awareness and ego dissolution. A foundational text for anyone beginning their journey into mindfulness, breathwork, and conscious healing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER CTA -->
+  <section class="section-padding newsletter">
+    <div class="container">
+      <div class="text-center">
+        <p class="section-subtitle reveal" style="color:#c9a84c;">Stay First in Line</p>
+        <h2 class="reveal">Get New Releases First</h2>
+        <div class="section-divider reveal"></div>
+        <p class="reveal" style="color:rgba(250,247,240,0.75); max-width:560px; margin:0 auto 12px;">
+          Be the first to hear about new audiobooks, free chapters, and exclusive discounts from T. Lott's growing library.
+        </p>
+        <form class="newsletter-form reveal" action="https://formspree.io/f/xlgozblw" method="POST">
+          <input type="email" name="email" placeholder="Your email address" required />
+          <button type="submit">Subscribe</button>
+        </form>
+        <p class="reveal" style="color:rgba(250,247,240,0.35); font-size:0.8rem; margin-top:16px;">No spam, ever. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <h3>Sacred Cycles <span style="color:#faf7f0; font-weight:400;">Renewal</span></h3>
+          <p>Clinician-designed wellness by T. Lott, RN — books, audiobooks, music, and holistic programs for the healing journey.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Rooms</h4>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/bookstore/">📚 Book Store</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/nurses-corner/">🩺 Nurse's Corner</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/music-artistry/">🎵 Music & Artistry</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/rooms/blog/">📰 Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Links</h4>
+          <a href="https://sacred-cycles-renewal.vercel.app">Main Site</a>
+          <a href="https://www.artistrystore.com" target="_blank" rel="noopener noreferrer">Artistry Store</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/#pricing">Enroll Now</a>
+          <a href="https://sacred-cycles-renewal.vercel.app/#contact">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Sacred Cycles Renewal | T. Lott, RN. All rights reserved.</p>
+        <p style="margin-top:8px; font-style:italic; max-width:600px; margin-left:auto; margin-right:auto; font-size:0.74rem;">
+          Disclaimer: Content is for educational and inspirational purposes only. Not a substitute for professional medical advice.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" aria-label="Back to top"><i class="fa fa-arrow-up"></i></button>
+
+  <script>
+    // Reading progress
+    (function() {
+      const bar = document.getElementById('reading-progress');
+      window.addEventListener('scroll', function() {
+        const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        bar.style.width = pct + '%';
+      }, { passive: true });
+    })();
+    // Navbar scroll
+    (function() {
+      const nav = document.getElementById('navbar');
+      window.addEventListener('scroll', function() {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+      }, { passive: true });
+    })();
+    // Reveal on scroll
+    (function() {
+      const els = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+      els.forEach(function(el) { obs.observe(el); });
+    })();
+    // Back to top
+    (function() {
+      const btn = document.getElementById('back-to-top');
+      window.addEventListener('scroll', function() { btn.classList.toggle('visible', window.scrollY > 500); }, { passive: true });
+      btn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    })();
+  </script>
+</body>
+</html>
